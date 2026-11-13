@@ -1,0 +1,121 @@
+{
+  "version": "1",
+  "pip_version": "25.3",
+  "install": [
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/81/33/efddeeec49af6ddae162e2824c77f8b1136c2ad43ec8d8fec53fb70c93ef/sentence_transformers-6.3.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=fb89d876edb6cb3a82b7a90f74bd7eb1118412ffabe56b249bd1884d35e705db",
+          "hashes": {
+            "sha256": "fb89d876edb6cb3a82b7a90f74bd7eb1118412ffabe56b249bd1884d35e705db"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "sentence-transformers",
+        "version": "6.3.0",
+        "dynamic": [
+          "license-file"
+        ],
+        "summary": "Embeddings, Retrieval, and Reranking",
+        "description": "<!--- BADGES: START --->\n\n[![HF Models](https://img.shields.io/badge/%F0%9F%A4%97-models-yellow)](https://huggingface.co/models?library=sentence-transformers)\n[![GitHub - License](https://img.shields.io/github/license/huggingface/sentence-transformers?logo=github&style=flat&color=green)][#github-license]\n[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sentence-transformers?logo=pypi&style=flat&color=blue)][#pypi-package]\n[![PyPI - Package Version](https://img.shields.io/pypi/v/sentence-transformers?logo=pypi&style=flat&color=orange)][#pypi-package]\n[![Docs - GitHub.io](https://img.shields.io/static/v1?logo=github&style=flat&color=pink&label=docs&message=sentence-transformers)][#docs-package]\n\n<!-- [![PyPI - Downloads](https://img.shields.io/pypi/dm/sentence-transformers?logo=pypi&style=flat&color=green)][#pypi-package] -->\n\n<!--- BADGES: END --->\n\n# Sentence Transformers: Embeddings, Retrieval, and Reranking\n\nThis framework provides an easy method to compute embeddings for accessing, using, and training state-of-the-art embedding and reranker models. It can be used to compute embeddings using Sentence Transformer models ([quickstart](https://sbert.net/docs/quickstart.html#sentence-transformer)), to calculate similarity scores using Cross-Encoder (a.k.a. reranker) models ([quickstart](https://sbert.net/docs/quickstart.html#cross-encoder)), to generate sparse embeddings using Sparse Encoder models ([quickstart](https://sbert.net/docs/quickstart.html#sparse-encoder)) or to compute token-level embeddings for ColBERT-style late-interaction retrieval using Multi-Vector Encoder models ([quickstart](https://sbert.net/docs/quickstart.html#multi-vector-encoder)). This unlocks a wide range of applications, including [semantic search](https://sbert.net/examples/sentence_transformer/applications/semantic-search/README.html), [semantic textual similarity](https://sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html), and [paraphrase mining](https://sbert.net/examples/sentence_transformer/applications/paraphrase-mining/README.html).\n\nA wide selection of over [15,000 pre-trained Sentence Transformers models](https://huggingface.co/models?library=sentence-transformers) are available for immediate use on 🤗 Hugging Face, including many of the state-of-the-art models from the [Massive Text Embeddings Benchmark (MTEB) leaderboard](https://huggingface.co/spaces/mteb/leaderboard). Additionally, it is easy to train or finetune your own [embedding models](https://sbert.net/docs/sentence_transformer/training_overview.html), [reranker models](https://sbert.net/docs/cross_encoder/training_overview.html), [sparse encoder models](https://sbert.net/docs/sparse_encoder/training_overview.html) or [multi-vector encoder models](https://sbert.net/docs/multi_vector_encoder/training_overview.html) using Sentence Transformers, enabling you to create custom models for your specific use cases.\n\nFor the **full documentation**, see **[www.SBERT.net](https://www.sbert.net)**.\n\n## Installation\n\nWe recommend **Python 3.10+**, **[PyTorch 2.2+](https://pytorch.org/get-started/locally/)**, and **[transformers v5.0+](https://github.com/huggingface/transformers)**.\n\n```\npip install -U sentence-transformers\n```\n\nSee [Installation](https://www.sbert.net/docs/installation.html) in the docs for uv, conda, source, and editable installs, CUDA setup, and extras (`[image]`, `[audio]`, `[video]`, `[train]`, `[onnx]`, `[openvino]`, `[dev]`).\n\n## Getting Started\n\nSee [Quickstart](https://www.sbert.net/docs/quickstart.html) in our documentation.\n\nLog in with `hf auth login` for higher Hugging Face Hub rate limits and access to private or gated models your account can read. See the [login instructions](https://www.sbert.net/docs/installation.html#log-in-to-hugging-face).\n\n### Embedding Models\n\nFirst download a pretrained embedding a.k.a. Sentence Transformer model.\n\n```python\nfrom sentence_transformers import SentenceTransformer\n\nmodel = SentenceTransformer(\"sentence-transformers/all-MiniLM-L6-v2\")\n```\n\nThen provide some texts to the model.\n\n```python\nsentences = [\n    \"The weather is lovely today.\",\n    \"It's so sunny outside!\",\n    \"He drove to the stadium.\",\n]\nembeddings = model.encode(sentences)\nprint(embeddings.shape)\n# => (3, 384)\n```\n\nAnd that's already it. We now have numpy arrays with the embeddings, one for each text. We can use these to compute similarities.\n\n```python\nsimilarities = model.similarity(embeddings, embeddings)\nprint(similarities)\n# tensor([[1.0000, 0.6660, 0.1046],\n#         [0.6660, 1.0000, 0.1411],\n#         [0.1046, 0.1411, 1.0000]])\n```\n\n### Reranker Models\n\nFirst download a pretrained reranker a.k.a. Cross Encoder model.\n\n```python\nfrom sentence_transformers import CrossEncoder\n\n# 1. Load a pretrained CrossEncoder model\nmodel = CrossEncoder(\"cross-encoder/ms-marco-MiniLM-L6-v2\")\n```\n\nThen provide some texts to the model.\n\n```python\n# The texts for which to predict similarity scores\nquery = \"How many people live in Berlin?\"\npassages = [\n    \"Berlin had a population of 3,520,031 registered inhabitants in an area of 891.82 square kilometers.\",\n    \"Berlin has a yearly total of about 135 million day visitors, making it one of the most-visited cities in the European Union.\",\n    \"In 2013 around 600,000 Berliners were registered in one of the more than 2,300 sport and fitness clubs.\",\n]\n\n# 2a. predict scores for pairs of texts\nscores = model.predict([(query, passage) for passage in passages])\nprint(scores)\n# => [8.607139 5.506266 6.352977]\n```\n\nAnd we're good to go. You can also use [`model.rank`](https://sbert.net/docs/package_reference/cross_encoder/model.html#sentence_transformers.cross_encoder.model.CrossEncoder.rank) to avoid having to perform the reranking manually:\n\n```python\n# 2b. Rank a list of passages for a query\nranks = model.rank(query, passages, return_documents=True)\n\nprint(\"Query:\", query)\nfor rank in ranks:\n    print(f\"- #{rank['corpus_id']} ({rank['score']:.2f}): {rank['text']}\")\n\"\"\"\nQuery: How many people live in Berlin?\n- #0 (8.61): Berlin had a population of 3,520,031 registered inhabitants in an area of 891.82 square kilometers.\n- #2 (6.35): In 2013 around 600,000 Berliners were registered in one of the more than 2,300 sport and fitness clubs.\n- #1 (5.51): Berlin has a yearly total of about 135 million day visitors, making it one of the most-visited cities in the European Union.\n\"\"\"\n```\n\n### Sparse Encoder Models\n\nFirst download a pretrained sparse embedding a.k.a. Sparse Encoder model.\n\n```python\n\nfrom sentence_transformers import SparseEncoder\n\n# 1. Load a pretrained SparseEncoder model\nmodel = SparseEncoder(\"naver/splade-cocondenser-ensembledistil\")\n\n# The sentences to encode\nsentences = [\n    \"The weather is lovely today.\",\n    \"It's so sunny outside!\",\n    \"He drove to the stadium.\",\n]\n\n# 2. Calculate sparse embeddings by calling model.encode()\nembeddings = model.encode(sentences)\nprint(embeddings.shape)\n# [3, 30522] - sparse representation with vocabulary size dimensions\n\n# 3. Calculate the embedding similarities\nsimilarities = model.similarity(embeddings, embeddings)\nprint(similarities)\n# tensor([[   35.629,     9.154,     0.098],\n#         [    9.154,    27.478,     0.019],\n#         [    0.098,     0.019,    29.553]])\n\n# 4. Check sparsity stats\nstats = SparseEncoder.sparsity(embeddings)\nprint(f\"Sparsity: {stats['sparsity_ratio']:.2%}\")\n# Sparsity: 99.84%\n```\n\n### Multi-Vector Encoder Models\n\nFirst download a pretrained multi-vector a.k.a. late-interaction (ColBERT-style) model.\n\n```python\nfrom sentence_transformers import MultiVectorEncoder\n\n# 1. Load a pretrained MultiVectorEncoder model\nmodel = MultiVectorEncoder(\"lightonai/GTE-ModernColBERT-v1\")\n\nqueries = [\"What is the capital of France?\"]\ndocuments = [\n    \"Paris is the capital of France.\",\n    \"Berlin is the capital of Germany.\",\n]\n\n# 2. Encode queries and documents into sequences of token-level embeddings\nquery_embeddings = model.encode_query(queries)\ndocument_embeddings = model.encode_document(documents)\nprint(query_embeddings[0].shape, document_embeddings[0].shape)\n# (10, 128) (9, 128)  # one 128-dimensional vector per token\n\n# 3. Score them with late interaction (MaxSim)\nscores = model.similarity(query_embeddings, document_embeddings)\nprint(scores)\n# tensor([[9.6037, 9.4055]])\n```\n\n## Pre-Trained Models\n\nWe provide a large list of pretrained models for more than 100 languages. Some models are general purpose models, while others produce embeddings for specific use cases.\n\n- [Pretrained Sentence Transformer (Embedding) Models](https://sbert.net/docs/sentence_transformer/pretrained_models.html)\n- [Pretrained Cross Encoder (Reranker) Models](https://sbert.net/docs/cross_encoder/pretrained_models.html)\n- [Pretrained Sparse Encoder (Sparse Embeddings) Models](https://sbert.net/docs/sparse_encoder/pretrained_models.html)\n- [Pretrained Multi-Vector Encoder (Late Interaction) Models](https://sbert.net/docs/multi_vector_encoder/pretrained_models.html)\n\n## Training\n\n> **Tip:** Using an AI coding agent (Claude Code, Codex, Cursor, Gemini CLI, ...)? Install the [`train-sentence-transformers`](skills/) Hugging Face Agent Skill via `hf skills add train-sentence-transformers [--claude] [--global]` and ask your agent to fine-tune a model on your data.\n\nThis framework allows you to fine-tune your own sentence embedding methods, so that you get task-specific sentence embeddings. You have various options to choose from in order to get perfect sentence embeddings for your specific task.\n\n- Embedding Models\n  - [Sentence Transformer > Training Overview](https://www.sbert.net/docs/sentence_transformer/training_overview.html)\n  - [Sentence Transformer > Training Examples](https://www.sbert.net/docs/sentence_transformer/training/examples.html) or [training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/sentence_transformer/training).\n- Reranker Models\n  - [Cross Encoder > Training Overview](https://www.sbert.net/docs/cross_encoder/training_overview.html)\n  - [Cross Encoder > Training Examples](https://www.sbert.net/docs/cross_encoder/training/examples.html) or [training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/cross_encoder/training).\n- Sparse Embedding Models\n  - [Sparse Encoder > Training Overview](https://www.sbert.net/docs/sparse_encoder/training_overview.html)\n  - [Sparse Encoder > Training Examples](https://www.sbert.net/docs/sparse_encoder/training/examples.html) or [training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/sparse_encoder/training).\n- Multi-Vector (Late Interaction) Models\n  - [Multi-Vector Encoder > Training Overview](https://www.sbert.net/docs/multi_vector_encoder/training_overview.html)\n  - [Training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/multi_vector_encoder/training).\n\nSome highlights across the different types of training are:\n\n- Support of various transformer networks including BERT, RoBERTa, XLM-R, DistilBERT, Electra, BART, ...\n- Multilingual and multi-task learning\n- Evaluation during training to find optimal model\n- [20+ loss functions](https://www.sbert.net/docs/package_reference/sentence_transformer/losses.html) for embedding models, [10+ loss functions](https://www.sbert.net/docs/package_reference/cross_encoder/losses.html) for reranker models and [10+ loss functions](https://www.sbert.net/docs/package_reference/sparse_encoder/losses.html) for sparse embedding models, allowing you to tune models specifically for semantic search, paraphrase mining, semantic similarity comparison, clustering, triplet loss, contrastive loss, etc.\n\n## Companion Blog Posts\n\nThe following Hugging Face blog posts complement this documentation with narrative walkthroughs and full training examples:\n\n**Training guides:**\n\n- [Training and Finetuning Embedding Models](https://huggingface.co/blog/train-sentence-transformers): end-to-end training of bi-encoder embedding models.\n- [Training and Finetuning Reranker Models](https://huggingface.co/blog/train-reranker): training Cross Encoder models for the second stage of retrieve-and-rerank pipelines.\n- [Training and Finetuning Sparse Embedding Models](https://huggingface.co/blog/train-sparse-encoder): training SPLADE and other sparse encoders.\n\n**Multimodal:**\n\n- [Multimodal Embedding & Reranker Models](https://huggingface.co/blog/multimodal-sentence-transformers): using text, image, audio, and video models through a single API.\n- [Training and Finetuning Multimodal Embedding & Reranker Models](https://huggingface.co/blog/train-multimodal-sentence-transformers): training multimodal models, with a Visual Document Retrieval walkthrough.\n\n**Efficiency techniques:**\n\n- [Introduction to Matryoshka Embedding Models](https://huggingface.co/blog/matryoshka): variable-size embeddings that can be truncated with minimal quality loss.\n- [Train 400x faster Static Embedding Models](https://huggingface.co/blog/static-embeddings): CPU-friendly embedding models without attention.\n- [Binary and Scalar Embedding Quantization for Significantly Faster & Cheaper Retrieval](https://huggingface.co/blog/embedding-quantization): post-training compression of embedding vectors.\n\n## Application Examples\n\nYou can use this framework for:\n\n- **Computing Sentence Embeddings**\n\n  - [Dense Embeddings](https://www.sbert.net/examples/sentence_transformer/applications/computing-embeddings/README.html)\n  - [Sparse Embeddings](https://www.sbert.net/examples/sparse_encoder/applications/computing_embeddings/README.html)\n\n- **Semantic Textual Similarity**\n\n  - [Dense STS](https://www.sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html)\n  - [Sparse STS](https://www.sbert.net/examples/sparse_encoder/applications/semantic_textual_similarity/README.html)\n\n- **Semantic Search**\n\n  - [Dense Search](https://www.sbert.net/examples/sentence_transformer/applications/semantic-search/README.html)\n  - [Sparse Search](https://www.sbert.net/examples/sparse_encoder/applications/semantic_search/README.html)\n\n- **Retrieve & Re-Rank**\n\n  - [Dense only Retrieval](https://www.sbert.net/examples/sentence_transformer/applications/retrieve_rerank/README.html)\n  - [Sparse/Dense/Hybrid Retrieval](https://www.sbert.net/examples/sentence_transformer/applications/retrieve_rerank/README.html)\n\n- [Clustering](https://www.sbert.net/examples/sentence_transformer/applications/clustering/README.html)\n\n- [Paraphrase Mining](https://www.sbert.net/examples/sentence_transformer/applications/paraphrase-mining/README.html)\n\n- [Translated Sentence Mining](https://www.sbert.net/examples/sentence_transformer/applications/parallel-sentence-mining/README.html)\n\n- [Multilingual Image Search, Clustering & Duplicate Detection](https://www.sbert.net/examples/sentence_transformer/applications/image-search/README.html)\n\nand many more use-cases.\n\nFor all examples, see [examples/sentence_transformer/applications](https://github.com/huggingface/sentence-transformers/tree/main/examples/sentence_transformer/applications).\n\n## Contributing\n\nSee the [contributor guidelines](CONTRIBUTING.md) for contribution expectations, AI usage guidelines, and development setup.\n\n## Citing & Authors\n\nIf you find this repository helpful, feel free to cite our publication [Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://huggingface.co/papers/1908.10084):\n\n```bibtex\n@inproceedings{reimers-2019-sentence-bert,\n    title = \"Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks\",\n    author = \"Reimers, Nils and Gurevych, Iryna\",\n    booktitle = \"Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing\",\n    month = \"11\",\n    year = \"2019\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://arxiv.org/abs/1908.10084\",\n}\n```\n\nIf you use one of the multilingual models, feel free to cite our publication [Making Monolingual Sentence Embeddings Multilingual using Knowledge Distillation](https://huggingface.co/papers/2004.09813):\n\n```bibtex\n@inproceedings{reimers-2020-multilingual-sentence-bert,\n    title = \"Making Monolingual Sentence Embeddings Multilingual using Knowledge Distillation\",\n    author = \"Reimers, Nils and Gurevych, Iryna\",\n    booktitle = \"Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing\",\n    month = \"11\",\n    year = \"2020\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://arxiv.org/abs/2004.09813\",\n}\n```\n\nPlease have a look at [Publications](https://www.sbert.net/docs/publications.html) for our different publications that are integrated into SentenceTransformers.\n\n### Maintainers\n\nMaintainer: [Tom Aarsen](https://github.com/tomaarsen), 🤗 Hugging Face\n\nDon't hesitate to open an issue if something is broken (and it shouldn't be) or if you have further questions.\n\n---\n\nThis project was originally developed by the [Ubiquitous Knowledge Processing (UKP) Lab](https://www.ukp.tu-darmstadt.de/) at TU Darmstadt. We're grateful for their foundational work and continued contributions to the field.\n\n> This repository contains experimental software and is published for the sole purpose of giving additional background details on the respective publication.\n\n[#docs-package]: https://www.sbert.net/\n[#github-license]: https://github.com/huggingface/sentence-transformers/blob/main/LICENSE\n[#pypi-package]: https://pypi.org/project/sentence-transformers/\n",
+        "description_content_type": "text/markdown",
+        "keywords": [
+          "Transformer Networks",
+          "BERT",
+          "XLNet",
+          "sentence embedding",
+          "PyTorch",
+          "NLP",
+          "deep learning"
+        ],
+        "author_email": "Nils Reimers <info@nils-reimers.de>, Tom Aarsen <tom.aarsen@huggingface.co>",
+        "maintainer_email": "Tom Aarsen <tom.aarsen@huggingface.co>",
+        "license_expression": "Apache-2.0",
+        "license_file": [
+          "LICENSE",
+          "NOTICE.txt"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Science/Research",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Topic :: Scientific/Engineering :: Artificial Intelligence"
+        ],
+        "requires_dist": [
+          "transformers<6.0.0,>=5.0.0",
+          "tokenizers>=0.19",
+          "huggingface-hub<3.0.0,>=1.3.0",
+          "torch>=2.2",
+          "numpy>=1.24.0",
+          "scikit-learn>=1.1.0",
+          "scipy>=1.0.0",
+          "typing_extensions>=4.10.0",
+          "tqdm>=4.0.0",
+          "transformers[vision]; extra == \"image\"",
+          "transformers[audio]; extra == \"audio\"",
+          "transformers[video]; extra == \"video\"",
+          "datasets>=2.16.0; extra == \"train\"",
+          "accelerate>=1.3.0; extra == \"train\"",
+          "mergekit>=0.1.5; extra == \"merge\"",
+          "transformers[kernels]>=5.20.0; extra == \"kernels\"",
+          "optimum-onnx[onnxruntime]; extra == \"onnx\"",
+          "optimum-onnx[onnxruntime-gpu]; extra == \"onnx-gpu\"",
+          "optimum-intel[openvino]>=2.0.0; extra == \"openvino\"",
+          "datasets>=2.16.0; extra == \"dev\"",
+          "accelerate>=1.3.0; extra == \"dev\"",
+          "fastcluster>=1.2.0; extra == \"dev\"",
+          "pre-commit; extra == \"dev\"",
+          "pytest>=8.2; extra == \"dev\"",
+          "pytest-cov; extra == \"dev\"",
+          "pytest-env; extra == \"dev\"",
+          "pytest-subtests; extra == \"dev\"",
+          "pytest-xdist; extra == \"dev\"",
+          "peft; extra == \"dev\"",
+          "transformers[audio,video,vision]; extra == \"dev\"",
+          "faiss-cpu; extra == \"dev\"",
+          "usearch; extra == \"dev\""
+        ],
+        "requires_python": ">=3.10",
+        "project_url": [
+          "Homepage, https://www.SBERT.net",
+          "Repository, https://github.com/huggingface/sentence-transformers/"
+        ],
+        "provides_extra": [
+          "image",
+          "audio",
+          "video",
+          "train",
+          "merge",
+          "kernels",
+          "onnx",
+          "onnx-gpu",
+          "openvino",
+          "dev"
+        ]
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.14.3",
+    "os_name": "nt",
+    "platform_machine": "AMD64",
+    "platform_release": "11",
+    "platform_system": "Windows",
+    "platform_version": "10.0.26300",
+    "python_full_version": "3.14.3",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.14",
+    "sys_platform": "win32"
+  }
+}

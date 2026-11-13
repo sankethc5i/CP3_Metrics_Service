@@ -1,0 +1,577 @@
+{
+  "version": "1",
+  "pip_version": "25.3",
+  "install": [
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/76/c1/dc1582b79e9a2eb0cddf9559cd9bcdff084f541d6fe881fdd9d98630dba7/sentence_transformers-5.6.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=d2075b5e687a1611005e20ab04a6846994d51adfcf39610aed066af3c0c0b81f",
+          "hashes": {
+            "sha256": "d2075b5e687a1611005e20ab04a6846994d51adfcf39610aed066af3c0c0b81f"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "sentence-transformers",
+        "version": "5.6.0",
+        "dynamic": [
+          "license-file"
+        ],
+        "summary": "Embeddings, Retrieval, and Reranking",
+        "description": "<!--- BADGES: START --->\n\n[![HF Models](https://img.shields.io/badge/%F0%9F%A4%97-models-yellow)](https://huggingface.co/models?library=sentence-transformers)\n[![GitHub - License](https://img.shields.io/github/license/huggingface/sentence-transformers?logo=github&style=flat&color=green)][#github-license]\n[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sentence-transformers?logo=pypi&style=flat&color=blue)][#pypi-package]\n[![PyPI - Package Version](https://img.shields.io/pypi/v/sentence-transformers?logo=pypi&style=flat&color=orange)][#pypi-package]\n[![Docs - GitHub.io](https://img.shields.io/static/v1?logo=github&style=flat&color=pink&label=docs&message=sentence-transformers)][#docs-package]\n\n<!-- [![PyPI - Downloads](https://img.shields.io/pypi/dm/sentence-transformers?logo=pypi&style=flat&color=green)][#pypi-package] -->\n\n<!--- BADGES: END --->\n\n# Sentence Transformers: Embeddings, Retrieval, and Reranking\n\nThis framework provides an easy method to compute embeddings for accessing, using, and training state-of-the-art embedding and reranker models. It can be used to compute embeddings using Sentence Transformer models ([quickstart](https://sbert.net/docs/quickstart.html#sentence-transformer)), to calculate similarity scores using Cross-Encoder (a.k.a. reranker) models ([quickstart](https://sbert.net/docs/quickstart.html#cross-encoder)) or to generate sparse embeddings using Sparse Encoder models ([quickstart](https://sbert.net/docs/quickstart.html#sparse-encoder)). This unlocks a wide range of applications, including [semantic search](https://sbert.net/examples/applications/semantic-search/README.html), [semantic textual similarity](https://sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html), and [paraphrase mining](https://sbert.net/examples/applications/paraphrase-mining/README.html).\n\nA wide selection of over [15,000 pre-trained Sentence Transformers models](https://huggingface.co/models?library=sentence-transformers) are available for immediate use on 🤗 Hugging Face, including many of the state-of-the-art models from the [Massive Text Embeddings Benchmark (MTEB) leaderboard](https://huggingface.co/spaces/mteb/leaderboard). Additionally, it is easy to train or finetune your own [embedding models](https://sbert.net/docs/sentence_transformer/training_overview.html), [reranker models](https://sbert.net/docs/cross_encoder/training_overview.html) or [sparse encoder models](https://sbert.net/docs/sparse_encoder/training_overview.html) using Sentence Transformers, enabling you to create custom models for your specific use cases.\n\nFor the **full documentation**, see **[www.SBERT.net](https://www.sbert.net)**.\n\n## Installation\n\nWe recommend **Python 3.10+**, **[PyTorch 1.11.0+](https://pytorch.org/get-started/locally/)**, and **[transformers v4.41.0+](https://github.com/huggingface/transformers)**.\n\n```\npip install -U sentence-transformers\n```\n\nSee [Installation](https://www.sbert.net/docs/installation.html) in the docs for uv, conda, source, and editable installs, CUDA setup, and extras (`[image]`, `[audio]`, `[video]`, `[train]`, `[onnx]`, `[openvino]`, `[dev]`).\n\n## Getting Started\n\nSee [Quickstart](https://www.sbert.net/docs/quickstart.html) in our documentation.\n\n### Embedding Models\n\nFirst download a pretrained embedding a.k.a. Sentence Transformer model.\n\n```python\nfrom sentence_transformers import SentenceTransformer\n\nmodel = SentenceTransformer(\"sentence-transformers/all-MiniLM-L6-v2\")\n```\n\nThen provide some texts to the model.\n\n```python\nsentences = [\n    \"The weather is lovely today.\",\n    \"It's so sunny outside!\",\n    \"He drove to the stadium.\",\n]\nembeddings = model.encode(sentences)\nprint(embeddings.shape)\n# => (3, 384)\n```\n\nAnd that's already it. We now have numpy arrays with the embeddings, one for each text. We can use these to compute similarities.\n\n```python\nsimilarities = model.similarity(embeddings, embeddings)\nprint(similarities)\n# tensor([[1.0000, 0.6660, 0.1046],\n#         [0.6660, 1.0000, 0.1411],\n#         [0.1046, 0.1411, 1.0000]])\n```\n\n### Reranker Models\n\nFirst download a pretrained reranker a.k.a. Cross Encoder model.\n\n```python\nfrom sentence_transformers import CrossEncoder\n\n# 1. Load a pretrained CrossEncoder model\nmodel = CrossEncoder(\"cross-encoder/ms-marco-MiniLM-L6-v2\")\n```\n\nThen provide some texts to the model.\n\n```python\n# The texts for which to predict similarity scores\nquery = \"How many people live in Berlin?\"\npassages = [\n    \"Berlin had a population of 3,520,031 registered inhabitants in an area of 891.82 square kilometers.\",\n    \"Berlin has a yearly total of about 135 million day visitors, making it one of the most-visited cities in the European Union.\",\n    \"In 2013 around 600,000 Berliners were registered in one of the more than 2,300 sport and fitness clubs.\",\n]\n\n# 2a. predict scores for pairs of texts\nscores = model.predict([(query, passage) for passage in passages])\nprint(scores)\n# => [8.607139 5.506266 6.352977]\n```\n\nAnd we're good to go. You can also use [`model.rank`](https://sbert.net/docs/package_reference/cross_encoder/cross_encoder.html#sentence_transformers.cross_encoder.model.CrossEncoder.rank) to avoid having to perform the reranking manually:\n\n```python\n# 2b. Rank a list of passages for a query\nranks = model.rank(query, passages, return_documents=True)\n\nprint(\"Query:\", query)\nfor rank in ranks:\n    print(f\"- #{rank['corpus_id']} ({rank['score']:.2f}): {rank['text']}\")\n\"\"\"\nQuery: How many people live in Berlin?\n- #0 (8.61): Berlin had a population of 3,520,031 registered inhabitants in an area of 891.82 square kilometers.\n- #2 (6.35): In 2013 around 600,000 Berliners were registered in one of the more than 2,300 sport and fitness clubs.\n- #1 (5.51): Berlin has a yearly total of about 135 million day visitors, making it one of the most-visited cities in the European Union.\n\"\"\"\n```\n\n### Sparse Encoder Models\n\nFirst download a pretrained sparse embedding a.k.a. Sparse Encoder model.\n\n```python\n\nfrom sentence_transformers import SparseEncoder\n\n# 1. Load a pretrained SparseEncoder model\nmodel = SparseEncoder(\"naver/splade-cocondenser-ensembledistil\")\n\n# The sentences to encode\nsentences = [\n    \"The weather is lovely today.\",\n    \"It's so sunny outside!\",\n    \"He drove to the stadium.\",\n]\n\n# 2. Calculate sparse embeddings by calling model.encode()\nembeddings = model.encode(sentences)\nprint(embeddings.shape)\n# [3, 30522] - sparse representation with vocabulary size dimensions\n\n# 3. Calculate the embedding similarities\nsimilarities = model.similarity(embeddings, embeddings)\nprint(similarities)\n# tensor([[   35.629,     9.154,     0.098],\n#         [    9.154,    27.478,     0.019],\n#         [    0.098,     0.019,    29.553]])\n\n# 4. Check sparsity stats\nstats = SparseEncoder.sparsity(embeddings)\nprint(f\"Sparsity: {stats['sparsity_ratio']:.2%}\")\n# Sparsity: 99.84%\n```\n\n## Pre-Trained Models\n\nWe provide a large list of pretrained models for more than 100 languages. Some models are general purpose models, while others produce embeddings for specific use cases.\n\n- [Pretrained Sentence Transformer (Embedding) Models](https://sbert.net/docs/sentence_transformer/pretrained_models.html)\n- [Pretrained Cross Encoder (Reranker) Models](https://sbert.net/docs/cross_encoder/pretrained_models.html)\n- [Pretrained Sparse Encoder (Sparse Embeddings) Models](https://sbert.net/docs/sparse_encoder/pretrained_models.html)\n\n## Training\n\n> **Tip:** Using an AI coding agent (Claude Code, Codex, Cursor, Gemini CLI, ...)? Install the [`train-sentence-transformers`](skills/) Hugging Face Agent Skill via `hf skills add train-sentence-transformers [--claude] [--global]` and ask your agent to fine-tune a model on your data.\n\nThis framework allows you to fine-tune your own sentence embedding methods, so that you get task-specific sentence embeddings. You have various options to choose from in order to get perfect sentence embeddings for your specific task.\n\n- Embedding Models\n  - [Sentence Transformer > Training Overview](https://www.sbert.net/docs/sentence_transformer/training_overview.html)\n  - [Sentence Transformer > Training Examples](https://www.sbert.net/docs/sentence_transformer/training/examples.html) or [training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/sentence_transformer/training).\n- Reranker Models\n  - [Cross Encoder > Training Overview](https://www.sbert.net/docs/cross_encoder/training_overview.html)\n  - [Cross Encoder > Training Examples](https://www.sbert.net/docs/cross_encoder/training/examples.html) or [training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/cross_encoder/training).\n- Sparse Embedding Models\n  - [Sparse Encoder > Training Overview](https://www.sbert.net/docs/sparse_encoder/training_overview.html)\n  - [Sparse Encoder > Training Examples](https://www.sbert.net/docs/sparse_encoder/training/examples.html) or [training examples on GitHub](https://github.com/huggingface/sentence-transformers/tree/main/examples/sparse_encoder/training).\n\nSome highlights across the different types of training are:\n\n- Support of various transformer networks including BERT, RoBERTa, XLM-R, DistilBERT, Electra, BART, ...\n- Multilingual and multi-task learning\n- Evaluation during training to find optimal model\n- [20+ loss functions](https://www.sbert.net/docs/package_reference/sentence_transformer/losses.html) for embedding models, [10+ loss functions](https://www.sbert.net/docs/package_reference/cross_encoder/losses.html) for reranker models and [10+ loss functions](https://www.sbert.net/docs/package_reference/sparse_encoder/losses.html) for sparse embedding models, allowing you to tune models specifically for semantic search, paraphrase mining, semantic similarity comparison, clustering, triplet loss, contrastive loss, etc.\n\n## Companion Blog Posts\n\nThe following Hugging Face blog posts complement this documentation with narrative walkthroughs and full training examples:\n\n**Training guides:**\n\n- [Training and Finetuning Embedding Models](https://huggingface.co/blog/train-sentence-transformers): end-to-end training of bi-encoder embedding models.\n- [Training and Finetuning Reranker Models](https://huggingface.co/blog/train-reranker): training Cross Encoder models for the second stage of retrieve-and-rerank pipelines.\n- [Training and Finetuning Sparse Embedding Models](https://huggingface.co/blog/train-sparse-encoder): training SPLADE and other sparse encoders.\n\n**Multimodal:**\n\n- [Multimodal Embedding & Reranker Models](https://huggingface.co/blog/multimodal-sentence-transformers): using text, image, audio, and video models through a single API.\n- [Training and Finetuning Multimodal Embedding & Reranker Models](https://huggingface.co/blog/train-multimodal-sentence-transformers): training multimodal models, with a Visual Document Retrieval walkthrough.\n\n**Efficiency techniques:**\n\n- [Introduction to Matryoshka Embedding Models](https://huggingface.co/blog/matryoshka): variable-size embeddings that can be truncated with minimal quality loss.\n- [Train 400x faster Static Embedding Models](https://huggingface.co/blog/static-embeddings): CPU-friendly embedding models without attention.\n- [Binary and Scalar Embedding Quantization for Significantly Faster & Cheaper Retrieval](https://huggingface.co/blog/embedding-quantization): post-training compression of embedding vectors.\n\n## Application Examples\n\nYou can use this framework for:\n\n- **Computing Sentence Embeddings**\n\n  - [Dense Embeddings](https://www.sbert.net/examples/sentence_transformer/applications/computing-embeddings/README.html)\n  - [Sparse Embeddings](https://www.sbert.net/examples/sparse_encoder/applications/computing_embeddings/README.html)\n\n- **Semantic Textual Similarity**\n\n  - [Dense STS](https://www.sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html)\n  - [Sparse STS](https://www.sbert.net/examples/sparse_encoder/applications/semantic_textual_similarity/README.html)\n\n- **Semantic Search**\n\n  - [Dense Search](https://www.sbert.net/examples/sentence_transformer/applications/semantic-search/README.html)\n  - [Sparse Search](https://www.sbert.net/examples/sparse_encoder/applications/semantic_search/README.html)\n\n- **Retrieve & Re-Rank**\n\n  - [Dense only Retrieval](https://www.sbert.net/examples/sentence_transformer/applications/retrieve_rerank/README.html)\n  - [Sparse/Dense/Hybrid Retrieval](https://www.sbert.net/examples/sentence_transformer/applications/retrieve_rerank/README.html)\n\n- [Clustering](https://www.sbert.net/examples/sentence_transformer/applications/clustering/README.html)\n\n- [Paraphrase Mining](https://www.sbert.net/examples/sentence_transformer/applications/paraphrase-mining/README.html)\n\n- [Translated Sentence Mining](https://www.sbert.net/examples/sentence_transformer/applications/parallel-sentence-mining/README.html)\n\n- [Multilingual Image Search, Clustering & Duplicate Detection](https://www.sbert.net/examples/sentence_transformer/applications/image-search/README.html)\n\nand many more use-cases.\n\nFor all examples, see [examples/sentence_transformer/applications](https://github.com/huggingface/sentence-transformers/tree/main/examples/sentence_transformer/applications).\n\n## Development setup\n\nAfter cloning the repo (or a fork) to your machine, in a virtual environment, run:\n\n```\npython -m pip install -e \".[dev]\"\n\npre-commit install\n```\n\nTo test your changes, run:\n\n```\npytest\n```\n\n## Citing & Authors\n\nIf you find this repository helpful, feel free to cite our publication [Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://huggingface.co/papers/1908.10084):\n\n```bibtex\n@inproceedings{reimers-2019-sentence-bert,\n    title = \"Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks\",\n    author = \"Reimers, Nils and Gurevych, Iryna\",\n    booktitle = \"Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing\",\n    month = \"11\",\n    year = \"2019\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://arxiv.org/abs/1908.10084\",\n}\n```\n\nIf you use one of the multilingual models, feel free to cite our publication [Making Monolingual Sentence Embeddings Multilingual using Knowledge Distillation](https://huggingface.co/papers/2004.09813):\n\n```bibtex\n@inproceedings{reimers-2020-multilingual-sentence-bert,\n    title = \"Making Monolingual Sentence Embeddings Multilingual using Knowledge Distillation\",\n    author = \"Reimers, Nils and Gurevych, Iryna\",\n    booktitle = \"Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing\",\n    month = \"11\",\n    year = \"2020\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://arxiv.org/abs/2004.09813\",\n}\n```\n\nPlease have a look at [Publications](https://www.sbert.net/docs/publications.html) for our different publications that are integrated into SentenceTransformers.\n\n### Maintainers\n\nMaintainer: [Tom Aarsen](https://github.com/tomaarsen), 🤗 Hugging Face\n\nDon't hesitate to open an issue if something is broken (and it shouldn't be) or if you have further questions.\n\n---\n\nThis project was originally developed by the [Ubiquitous Knowledge Processing (UKP) Lab](https://www.ukp.tu-darmstadt.de/) at TU Darmstadt. We're grateful for their foundational work and continued contributions to the field.\n\n> This repository contains experimental software and is published for the sole purpose of giving additional background details on the respective publication.\n\n[#docs-package]: https://www.sbert.net/\n[#github-license]: https://github.com/huggingface/sentence-transformers/blob/main/LICENSE\n[#pypi-package]: https://pypi.org/project/sentence-transformers/\n",
+        "description_content_type": "text/markdown",
+        "keywords": [
+          "Transformer Networks",
+          "BERT",
+          "XLNet",
+          "sentence embedding",
+          "PyTorch",
+          "NLP",
+          "deep learning"
+        ],
+        "author_email": "Nils Reimers <info@nils-reimers.de>, Tom Aarsen <tom.aarsen@huggingface.co>",
+        "maintainer_email": "Tom Aarsen <tom.aarsen@huggingface.co>",
+        "license_expression": "Apache-2.0",
+        "license_file": [
+          "LICENSE",
+          "NOTICE.txt"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Science/Research",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Topic :: Scientific/Engineering :: Artificial Intelligence"
+        ],
+        "requires_dist": [
+          "transformers<6.0.0,>=4.41.0",
+          "huggingface-hub>=0.23.0",
+          "torch>=1.11.0",
+          "numpy>=1.20.0",
+          "scikit-learn>=0.22.0",
+          "scipy>=1.0.0",
+          "typing_extensions>=4.5.0",
+          "tqdm>=4.0.0",
+          "transformers[vision]; extra == \"image\"",
+          "transformers[audio]; extra == \"audio\"",
+          "transformers[video]; extra == \"video\"",
+          "datasets>=2.0.0; extra == \"train\"",
+          "accelerate>=0.20.3; extra == \"train\"",
+          "optimum-onnx[onnxruntime]; extra == \"onnx\"",
+          "optimum-onnx[onnxruntime-gpu]; extra == \"onnx-gpu\"",
+          "optimum-intel[openvino]; extra == \"openvino\"",
+          "datasets>=2.0.0; extra == \"dev\"",
+          "accelerate>=0.20.3; extra == \"dev\"",
+          "pre-commit; extra == \"dev\"",
+          "pytest; extra == \"dev\"",
+          "pytest-cov; extra == \"dev\"",
+          "pytest-env; extra == \"dev\"",
+          "pytest-subtests; extra == \"dev\"",
+          "pytest-xdist; extra == \"dev\"",
+          "peft; extra == \"dev\"",
+          "transformers[audio,video,vision]; extra == \"dev\""
+        ],
+        "requires_python": ">=3.10",
+        "project_url": [
+          "Homepage, https://www.SBERT.net",
+          "Repository, https://github.com/huggingface/sentence-transformers/"
+        ],
+        "provides_extra": [
+          "image",
+          "audio",
+          "video",
+          "train",
+          "onnx",
+          "onnx-gpu",
+          "openvino",
+          "dev"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/50/e2/7ad17747517e4c813dca78257d6bb593466f8231baf1384bc98d92745edb/pillow-13.0.0-cp314-cp314-win_amd64.whl",
+        "archive_info": {
+          "hash": "sha256=f7cbb7a64e7ec664775195e4f81923bc8a93d9451b963f844e59118f63147a7a",
+          "hashes": {
+            "sha256": "f7cbb7a64e7ec664775195e4f81923bc8a93d9451b963f844e59118f63147a7a"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "pillow",
+        "version": "13.0.0",
+        "dynamic": [
+          "license-file"
+        ],
+        "summary": "Python Imaging Library (fork)",
+        "description": "<p align=\"center\">\n    <img width=\"248\" height=\"250\" src=\"https://raw.githubusercontent.com/python-pillow/pillow-logo/main/pillow-logo-248x250.png\" alt=\"Pillow logo\">\n</p>\n\n# Pillow\n\n## Python Imaging Library (Fork)\n\nPillow is the friendly PIL fork by [Jeffrey 'Alex' Clark and\ncontributors](https://github.com/python-pillow/Pillow/graphs/contributors).\nPIL is the Python Imaging Library by Fredrik Lundh and contributors.\nDevelopment is supported by:\n- [Tidelift](https://tidelift.com/lifter/search/pypi/pillow) (since 2018)\n- [Thanks.dev](https://thanks.dev) (since 2023)\n- [GitHub Sponsors](https://github.com/sponsors/python-pillow) (since 2026)\n\n<table>\n    <tr>\n        <th>docs</th>\n        <td>\n            <a href=\"https://pillow.readthedocs.io/?badge=latest\"><img\n                alt=\"Documentation Status\"\n                src=\"https://readthedocs.org/projects/pillow/badge/?version=latest\"></a>\n        </td>\n    </tr>\n    <tr>\n        <th>tests</th>\n        <td>\n            <a href=\"https://github.com/python-pillow/Pillow/actions/workflows/lint.yml\"><img\n                alt=\"GitHub Actions build status (Lint)\"\n                src=\"https://github.com/python-pillow/Pillow/workflows/Lint/badge.svg\"></a>\n            <a href=\"https://github.com/python-pillow/Pillow/actions/workflows/test.yml\"><img\n                alt=\"GitHub Actions build status (Test Linux and macOS)\"\n                src=\"https://github.com/python-pillow/Pillow/workflows/Test/badge.svg\"></a>\n            <a href=\"https://github.com/python-pillow/Pillow/actions/workflows/test-windows.yml\"><img\n                alt=\"GitHub Actions build status (Test Windows)\"\n                src=\"https://github.com/python-pillow/Pillow/workflows/Test%20Windows/badge.svg\"></a>\n            <a href=\"https://github.com/python-pillow/Pillow/actions/workflows/test-mingw.yml\"><img\n                alt=\"GitHub Actions build status (Test MinGW)\"\n                src=\"https://github.com/python-pillow/Pillow/workflows/Test%20MinGW/badge.svg\"></a>\n            <a href=\"https://github.com/python-pillow/Pillow/actions/workflows/test-docker.yml\"><img\n                alt=\"GitHub Actions build status (Test Docker)\"\n                src=\"https://github.com/python-pillow/Pillow/workflows/Test%20Docker/badge.svg\"></a>\n            <a href=\"https://github.com/python-pillow/Pillow/actions/workflows/wheels.yml\"><img\n                alt=\"GitHub Actions build status (Wheels)\"\n                src=\"https://github.com/python-pillow/Pillow/workflows/Wheels/badge.svg\"></a>\n            <a href=\"https://app.codecov.io/gh/python-pillow/Pillow\"><img\n                alt=\"Code coverage\"\n                src=\"https://codecov.io/gh/python-pillow/Pillow/branch/main/graph/badge.svg\"></a>\n            <a href=\"https://issues.oss-fuzz.com/issues?q=title:pillow\"><img\n                alt=\"Fuzzing Status\"\n                src=\"https://oss-fuzz-build-logs.storage.googleapis.com/badges/pillow.svg\"></a>\n        </td>\n    </tr>\n    <tr>\n        <th>package</th>\n        <td>\n            <a href=\"https://zenodo.org/badge/latestdoi/17549/python-pillow/Pillow\"><img\n                alt=\"Zenodo\"\n                src=\"https://zenodo.org/badge/17549/python-pillow/Pillow.svg\"></a>\n            <a href=\"https://tidelift.com/lifter/search/pypi/pillow\"><img\n                alt=\"Tidelift\"\n                src=\"https://tidelift.com/badges/package/pypi/pillow?style=flat\"></a>\n            <a href=\"https://pypi.org/project/pillow/\"><img\n                alt=\"Newest PyPI version\"\n                src=\"https://img.shields.io/pypi/v/pillow.svg\"></a>\n            <a href=\"https://pypi.org/project/pillow/\"><img\n                alt=\"Number of PyPI downloads\"\n                src=\"https://img.shields.io/pypi/dm/pillow.svg\"></a>\n            <a href=\"https://www.bestpractices.dev/projects/6331\"><img\n                alt=\"OpenSSF Best Practices\"\n                src=\"https://www.bestpractices.dev/projects/6331/badge\"></a>\n        </td>\n    </tr>\n    <tr>\n        <th>social</th>\n        <td>\n            <a href=\"https://gitter.im/python-pillow/Pillow?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge\"><img\n                alt=\"Join the chat at https://gitter.im/python-pillow/Pillow\"\n                src=\"https://badges.gitter.im/python-pillow/Pillow.svg\"></a>\n            <a href=\"https://fosstodon.org/@pillow\"><img\n                alt=\"Follow on https://fosstodon.org/@pillow\"\n                src=\"https://img.shields.io/badge/publish-on%20Mastodon-595aff.svg\"\n                rel=\"me\"></a>\n        </td>\n    </tr>\n</table>\n\n## Overview\n\nThe Python Imaging Library adds image processing capabilities to your Python interpreter.\n\nThis library provides extensive file format support, an efficient internal representation, and fairly powerful image processing capabilities.\n\nThe core image library is designed for fast access to data stored in a few basic pixel formats. It should provide a solid foundation for a general image processing tool.\n\n## More information\n\n- [Documentation](https://pillow.readthedocs.io/)\n  - [Installation](https://pillow.readthedocs.io/en/latest/installation/basic-installation.html)\n  - [Handbook](https://pillow.readthedocs.io/en/latest/handbook/index.html)\n- [Contribute](https://github.com/python-pillow/Pillow/blob/main/.github/CONTRIBUTING.md)\n  - [Issues](https://github.com/python-pillow/Pillow/issues)\n  - [Pull requests](https://github.com/python-pillow/Pillow/pulls)\n- [Release notes](https://pillow.readthedocs.io/en/stable/releasenotes/index.html)\n- [Changelog](https://github.com/python-pillow/Pillow/releases)\n  - [Pre-fork](https://github.com/python-pillow/Pillow/blob/main/CHANGES.rst#pre-fork)\n\n## Report a vulnerability\n\nTo report sensitive vulnerability information, report it [privately on GitHub](https://github.com/python-pillow/Pillow/security/advisories/new).\n\nIf you cannot use GitHub, use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.\n\nDO NOT report sensitive vulnerability information in public.\n",
+        "description_content_type": "text/markdown",
+        "keywords": [
+          "Imaging"
+        ],
+        "author_email": "Jeffrey 'Alex' Clark <aclark@aclark.net>",
+        "license_expression": "MIT-CMU",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "Development Status :: 6 - Mature",
+          "Programming Language :: Python :: 3 :: Only",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy",
+          "Topic :: Multimedia :: Graphics",
+          "Topic :: Multimedia :: Graphics :: Capture :: Digital Camera",
+          "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture",
+          "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+          "Topic :: Multimedia :: Graphics :: Viewers",
+          "Typing :: Typed"
+        ],
+        "requires_dist": [
+          "furo; extra == \"docs\"",
+          "olefile; extra == \"docs\"",
+          "sphinx>=8.2; extra == \"docs\"",
+          "sphinx-autobuild; extra == \"docs\"",
+          "sphinx-copybutton; extra == \"docs\"",
+          "sphinx-inline-tabs; extra == \"docs\"",
+          "sphinxext-opengraph; extra == \"docs\"",
+          "olefile; extra == \"fpx\"",
+          "olefile; extra == \"mic\"",
+          "arro3-compute; extra == \"test-arrow\"",
+          "arro3-core; extra == \"test-arrow\"",
+          "nanoarrow; extra == \"test-arrow\"",
+          "pyarrow; extra == \"test-arrow\"",
+          "coverage>=7.4.2; extra == \"tests\"",
+          "defusedxml; extra == \"tests\"",
+          "markdown2; extra == \"tests\"",
+          "olefile; extra == \"tests\"",
+          "packaging; extra == \"tests\"",
+          "psutil; (sys_platform == \"linux\" or sys_platform == \"darwin\") and extra == \"tests\"",
+          "pytest; extra == \"tests\"",
+          "pytest-cov; extra == \"tests\"",
+          "pytest-timeout; extra == \"tests\"",
+          "pytest-xdist; extra == \"tests\"",
+          "setuptools; extra == \"tests\"",
+          "trove-classifiers>=2024.10.12; extra == \"tests\"",
+          "defusedxml; extra == \"xmp\""
+        ],
+        "requires_python": ">=3.11",
+        "project_url": [
+          "Release notes, https://pillow.readthedocs.io/en/stable/releasenotes/index.html",
+          "Changelog, https://github.com/python-pillow/Pillow/releases",
+          "Documentation, https://pillow.readthedocs.io",
+          "Funding, https://tidelift.com/lifter/search/pypi/pillow",
+          "Homepage, https://python-pillow.org",
+          "Mastodon, https://fosstodon.org/@pillow",
+          "Security, https://pillow.readthedocs.io/en/stable/handbook/security.html",
+          "Source, https://github.com/python-pillow/Pillow"
+        ],
+        "provides_extra": [
+          "docs",
+          "fpx",
+          "mic",
+          "test-arrow",
+          "tests",
+          "xmp"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/58/c4/59f60e52e8f679488bf0caecbe3a8469af1d3d72c352bb0f306915a3e667/streamlit-1.67.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=f29da87c443bfbdfc52738616e3d65745d438e718da8faf69e2be0da1e52ce64",
+          "hashes": {
+            "sha256": "f29da87c443bfbdfc52738616e3d65745d438e718da8faf69e2be0da1e52ce64"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "streamlit",
+        "version": "1.67.0",
+        "summary": "A faster way to build and share data apps",
+        "description": "<br>\n\n<img src=\"https://user-images.githubusercontent.com/7164864/217935870-c0bc60a3-6fc0-4047-b011-7b4c59488c91.png\" alt=\"Streamlit logo\" style=\"margin-top:50px\"></img>\n\n# Welcome to Streamlit 👋\n\n**A faster way to build and share data apps.**\n\n## What is Streamlit?\n\nStreamlit lets you transform Python scripts into interactive web apps in minutes, instead of weeks. Build dashboards, generate reports, or create chat apps. Once you’ve created an app, you can use our [Community Cloud platform](https://streamlit.io/cloud) to deploy, manage, and share your app.\n\n### Why choose Streamlit?\n\n- **Simple and Pythonic:** Write beautiful, easy-to-read code.\n- **Fast, interactive prototyping:** Let others interact with your data and provide feedback quickly.\n- **Live editing:** See your app update instantly as you edit your script.\n- **Open-source and free:** Join a vibrant community and contribute to Streamlit's future.\n\n## Installation\n\nOpen a terminal and run:\n\n```bash\n$ pip install streamlit\n$ streamlit hello\n```\n\nIf this opens our sweet _Streamlit Hello_ app in your browser, you're all set! If not, head over to [our docs](https://docs.streamlit.io/get-started) for specific installs.\n\nThe app features a bunch of examples of what you can do with Streamlit. Jump to the [quickstart](#quickstart) section to understand how that all works.\n\n<img src=\"https://user-images.githubusercontent.com/7164864/217936487-1017784e-68ec-4e0d-a7f6-6b97525ddf88.gif\" alt=\"Streamlit Hello\" width=500 href=\"none\"></img>\n\n## Quickstart\n\n### A little example\n\nCreate a new file named `streamlit_app.py` in your project directory with the following code:\n```python\nimport streamlit as st\n\nx = st.slider(\"Select a value\")\nst.write(x, \"squared is\", x * x)\n```\n\nNow run it to open the app!\n```\n$ streamlit run streamlit_app.py\n```\n\n<img src=\"https://user-images.githubusercontent.com/7164864/215172915-cf087c56-e7ae-449a-83a4-b5fa0328d954.gif\" width=300 alt=\"Little example\"></img>\n\n### Give me more!\n\nStreamlit comes in with [a ton of additional powerful elements](https://docs.streamlit.io/develop/api-reference) to spice up your data apps and delight your viewers. Some examples:\n\n<table border=\"0\">\n  <tr>\n    <td>\n      <a target=\"_blank\" href=\"https://docs.streamlit.io/develop/api-reference/widgets\">\n        <img src=\"https://user-images.githubusercontent.com/7164864/217936099-12c16f8c-7fe4-44b1-889a-1ac9ee6a1b44.png\" style=\"max-height:150px; width:auto; display:block;\">\n      </a>\n    </td>\n    <td>\n      <a target=\"_blank\" href=\"https://docs.streamlit.io/develop/api-reference/data/st.dataframe\">\n        <img src=\"https://user-images.githubusercontent.com/7164864/215110064-5eb4e294-8f30-4933-9563-0275230e52b5.gif\" style=\"max-height:150px; width:auto; display:block;\">\n      </a>\n    </td>\n    <td>\n      <a target=\"_blank\" href=\"https://docs.streamlit.io/develop/api-reference/charts\">\n        <img src=\"https://user-images.githubusercontent.com/7164864/215174472-bca8a0d7-cf4b-4268-9c3b-8c03dad50bcd.gif\" style=\"max-height:150px; width:auto; display:block;\">\n      </a>\n    </td>\n    <td>\n      <a target=\"_blank\" href=\"https://docs.streamlit.io/develop/api-reference/layout\">\n        <img src=\"https://user-images.githubusercontent.com/7164864/217936149-a35c35be-0d96-4c63-8c6a-1c4b52aa8f60.png\" style=\"max-height:150px; width:auto; display:block;\">\n      </a>\n    </td>\n    <td>\n      <a target=\"_blank\" href=\"https://docs.streamlit.io/develop/concepts/multipage-apps\">\n        <img src=\"https://user-images.githubusercontent.com/7164864/215173883-eae0de69-7c1d-4d78-97d0-3bc1ab865e5b.gif\" style=\"max-height:150px; width:auto; display:block;\">\n      </a>\n    </td>\n    <td>\n      <a target=\"_blank\" href=\"https://streamlit.io/gallery\">\n        <img src=\"https://user-images.githubusercontent.com/7164864/215109229-6ae9111f-e5c1-4f0b-b3a2-87a79268ccc9.gif\" style=\"max-height:150px; width:auto; display:block;\">\n      </a>\n    </td>\n  </tr>\n  <tr>\n    <td>Input widgets</td>\n    <td>Dataframes</td>\n    <td>Charts</td>\n    <td>Layout</td>\n    <td>Multi-page apps</td>\n    <td>Fun</td>\n  </tr>\n</table>\n\n\nOur vibrant creators community also extends Streamlit capabilities using  🧩 [Streamlit Components](https://streamlit.io/components).\n\n## Get inspired\n\nThere's so much you can build with Streamlit:\n- 🤖  [LLMs & chatbot apps](https://streamlit.io/gallery?category=llms)\n- 🧬  [Science & technology apps](https://streamlit.io/gallery?category=science-technology)\n- 💬  [NLP & language apps](https://streamlit.io/gallery?category=nlp-language)\n- 🏦  [Finance & business apps](https://streamlit.io/gallery?category=finance-business)\n- 🗺  [Geography & society apps](https://streamlit.io/gallery?category=geography-society)\n- and more!\n\n**Check out [our gallery!](https://streamlit.io/gallery)** 🎈\n\n## Community Cloud\n\nDeploy, manage and share your apps for free using our [Community Cloud](https://streamlit.io/cloud)! Sign-up [here](https://share.streamlit.io/signup). <br><br>\n<img src=\"https://user-images.githubusercontent.com/7164864/214965336-64500db3-0d79-4a20-8052-2dda883902d2.gif\" width=\"400\"></img>\n\n## Resources\n\n- Explore our [docs](https://docs.streamlit.io) to learn how Streamlit works.\n- Ask questions and get help in our [community forum](https://discuss.streamlit.io).\n- Read our [blog](https://blog.streamlit.io) for tips from developers and creators.\n- Extend Streamlit's capabilities by installing or creating your own [Streamlit Components](https://streamlit.io/components).\n- Help others find and play with your app by using the Streamlit GitHub badge in your repository:\n```markdown\n[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](URL_TO_YOUR_APP)\n```\n[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/streamlit/roadmap)\n\n## Contribute\n\n🎉 Thanks for your interest in helping improve Streamlit! 🎉\n\nWe have paused accepting pull requests from outside the Streamlit maintainer team. You can still\nmake a valuable contribution by [reporting bugs](https://github.com/streamlit/streamlit/issues/new?template=bug_report.yml),\n[requesting features](https://github.com/streamlit/streamlit/issues/new?template=feature_request.yml),\n[improving or upvoting existing issues](https://github.com/streamlit/streamlit/issues?q=is%3Aissue%20state%3Aopen%20sort%3Areactions-%2B1-desc),\n[commenting on open specs](https://github.com/streamlit/streamlit/issues?q=state%3Aopen%20label%3Achange%3Aspec), creating\n[custom components](https://docs.streamlit.io/develop/concepts/custom-components/components-v2),\nand contributing to [streamlit-extras](https://github.com/arnaudmiribel/streamlit-extras).\n\nRead our [contribution guide](https://github.com/streamlit/streamlit/blob/develop/CONTRIBUTING.md)\nfor details.\n\n## License\n\nStreamlit is completely free and open-source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.\n",
+        "description_content_type": "text/markdown",
+        "author_email": "Snowflake Inc <hello@streamlit.io>",
+        "license_expression": "Apache-2.0",
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Environment :: Console",
+          "Environment :: Web Environment",
+          "Intended Audience :: Developers",
+          "Intended Audience :: Science/Research",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15",
+          "Topic :: Database :: Front-Ends",
+          "Topic :: Office/Business :: Financial :: Spreadsheet",
+          "Topic :: Scientific/Engineering :: Information Analysis",
+          "Topic :: Scientific/Engineering :: Visualization",
+          "Topic :: Software Development :: Libraries :: Application Frameworks",
+          "Topic :: Software Development :: Widget Sets"
+        ],
+        "requires_dist": [
+          "altair!=5.4.0,!=5.4.1,<7,>=5.0.0",
+          "click<9,>=7.0",
+          "numpy<3,>=1.25.0",
+          "packaging>=20",
+          "pandas<4,>=1.5.3",
+          "pillow<14,>=9.2.0",
+          "pydeck<1,>=0.8.0b4",
+          "protobuf<8,>=5.26.1",
+          "pyarrow!=25.0.0,<27,>=12.0.0",
+          "requests<3,>=2.27",
+          "typing-extensions<5,>=4.10.0",
+          "starlette<2,>=0.46.0",
+          "uvicorn<1,>=0.30.0",
+          "anyio<5,>=4.0.0",
+          "python-multipart<1,>=0.0.10",
+          "websockets<18,>=12.0.0",
+          "itsdangerous<3,>=2.1.2",
+          "watchdog<8,>=2.1.5; platform_system != \"Darwin\"",
+          "snowflake-snowpark-python[modin]>=1.17.0; extra == \"snowflake\"",
+          "snowflake-connector-python>=3.3.0; extra == \"snowflake\"",
+          "streamlit-pdf>=2.1.0; extra == \"pdf\"",
+          "Authlib>=1.3.2; extra == \"auth\"",
+          "httpx>=0.24.1; extra == \"auth\"",
+          "matplotlib>=3.0.0; extra == \"charts\"",
+          "graphviz>=0.19.0; extra == \"charts\"",
+          "plotly>=4.0.0; extra == \"charts\"",
+          "orjson>=3.5.0; extra == \"charts\"",
+          "SQLAlchemy>=2.0.0; extra == \"sql\"",
+          "httptools>=0.6.3; extra == \"performance\"",
+          "orjson>=3.5.0; extra == \"performance\"",
+          "uvloop>=0.15.2; (sys_platform != \"win32\" and sys_platform != \"cygwin\" and platform_python_implementation != \"PyPy\") and extra == \"performance\"",
+          "streamlit[auth,charts,pdf,performance,snowflake,sql]; extra == \"all\"",
+          "rich>=11.0.0; extra == \"all\""
+        ],
+        "requires_python": ">=3.11",
+        "project_url": [
+          "Homepage, https://streamlit.io",
+          "Documentation, https://docs.streamlit.io/",
+          "Source Code, https://github.com/streamlit/streamlit",
+          "Bug Tracker, https://github.com/streamlit/streamlit/issues",
+          "Release Notes, https://docs.streamlit.io/develop/quick-reference/changelog",
+          "Community, https://discuss.streamlit.io/"
+        ],
+        "provides_extra": [
+          "snowflake",
+          "pdf",
+          "auth",
+          "charts",
+          "sql",
+          "performance",
+          "all"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/04/96/92447566d16df59b2a776c0fb82dbc4d9e07cd95062562af01e408583fc4/itsdangerous-2.2.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef",
+          "hashes": {
+            "sha256": "c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "itsdangerous",
+        "version": "2.2.0",
+        "summary": "Safely pass data to untrusted environments and back.",
+        "description": "# ItsDangerous\n\n... so better sign this\n\nVarious helpers to pass data to untrusted environments and to get it\nback safe and sound. Data is cryptographically signed to ensure that a\ntoken has not been tampered with.\n\nIt's possible to customize how data is serialized. Data is compressed as\nneeded. A timestamp can be added and verified automatically while\nloading a token.\n\n\n## A Simple Example\n\nHere's how you could generate a token for transmitting a user's id and\nname between web requests.\n\n```python\nfrom itsdangerous import URLSafeSerializer\nauth_s = URLSafeSerializer(\"secret key\", \"auth\")\ntoken = auth_s.dumps({\"id\": 5, \"name\": \"itsdangerous\"})\n\nprint(token)\n# eyJpZCI6NSwibmFtZSI6Iml0c2Rhbmdlcm91cyJ9.6YP6T0BaO67XP--9UzTrmurXSmg\n\ndata = auth_s.loads(token)\nprint(data[\"name\"])\n# itsdangerous\n```\n\n\n## Donate\n\nThe Pallets organization develops and supports ItsDangerous and other\npopular packages. In order to grow the community of contributors and\nusers, and allow the maintainers to devote more time to the projects,\n[please donate today][].\n\n[please donate today]: https://palletsprojects.com/donate\n\n",
+        "description_content_type": "text/markdown",
+        "maintainer_email": "Pallets <contact@palletsprojects.com>",
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: BSD License",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python",
+          "Typing :: Typed"
+        ],
+        "requires_python": ">=3.8",
+        "project_url": [
+          "Changes, https://itsdangerous.palletsprojects.com/changes/",
+          "Chat, https://discord.gg/pallets",
+          "Documentation, https://itsdangerous.palletsprojects.com/",
+          "Donate, https://palletsprojects.com/donate",
+          "Source, https://github.com/pallets/itsdangerous/"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/dd/1b/6b1b4164ec734cac911460ab599bfbe46afedd42c5c9627fe4235942c314/python_multipart-0.0.33-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=8f16c07b36add9da6b2ee87d3efcaf0a45a6de9c3d0a5dd94e9ccf7675a7bc45",
+          "hashes": {
+            "sha256": "8f16c07b36add9da6b2ee87d3efcaf0a45a6de9c3d0a5dd94e9ccf7675a7bc45"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.5",
+        "name": "python-multipart",
+        "version": "0.0.33",
+        "summary": "A streaming multipart parser for Python",
+        "description": "# Python-Multipart\n\n[![CI](https://github.com/Kludex/python-multipart/actions/workflows/main.yml/badge.svg)](https://github.com/Kludex/python-multipart/actions/workflows/main.yml)\n[![PyPI](https://img.shields.io/pypi/v/python-multipart.svg)](https://pypi.org/project/python-multipart)\n[![Python versions](https://img.shields.io/pypi/pyversions/python-multipart.svg)](https://pypi.org/project/python-multipart)\n[![Discord](https://img.shields.io/discord/1051468649518616576?logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/RxKUF5JuHs)\n\nPython-Multipart reads the data that a web browser sends when someone submits a form or uploads a file.\n\n```console\npip install python-multipart\n```\n\nIt powers file uploads in [Starlette](https://starlette.dev) and [FastAPI](https://fastapi.tiangolo.com).\n\n## What problem does it solve?\n\n### A form sends data\n\nWhen you fill in a form on a website and click \"Submit\", your browser sends the data to a server.\nThe server is a program, maybe written in Python, that has to read that data and make sense of it.\n\n### Files need a special format\n\nA form with only text, like a username, is sent as one short line: `username=alice`.\n\nA form with a file is different. A file can contain anything, even text that looks like `username=alice`.\nSo the browser uses a format called `multipart/form-data`. It splits the request into **parts**, one per form field, separated by a **boundary**: a marker string the browser picks.\n\nThis is what the server receives when you send a username and a file called `cat.txt`:\n\n```text\n--boundary\nContent-Disposition: form-data; name=\"username\"\n\nalice\n--boundary\nContent-Disposition: form-data; name=\"avatar\"; filename=\"cat.txt\"\nContent-Type: text/plain\n\nmeow\n--boundary--\n```\n\nEach part has some headers (the field name, the file name) and then the content.\nEvery line ends with `\\r\\n` (a carriage return and a newline), which is why the examples below write `\\r\\n` explicitly.\nA **parser** is the code that turns this text back into fields and files. Python-Multipart is that parser.\n\n### Big files do not fit in memory\n\nAn upload can be a 5 GB video. If the server reads the whole request before it starts working, it needs 5 GB of memory, per upload.\n\nPython-Multipart is a **streaming** parser. You give it the request a small piece (a **chunk**) at a time, and it tells you what it found as soon as it finds it. The full request never has to be in memory.\n\n## Usage\n\n### Parse a whole form\n\n```python\nfrom io import BytesIO\n\nfrom python_multipart import parse_form\n\nbody = (\n    b\"--boundary\\r\\n\"\n    b'Content-Disposition: form-data; name=\"username\"\\r\\n'\n    b\"\\r\\n\"\n    b\"alice\\r\\n\"\n    b\"--boundary\\r\\n\"\n    b'Content-Disposition: form-data; name=\"avatar\"; filename=\"cat.txt\"\\r\\n'\n    b\"Content-Type: text/plain\\r\\n\"\n    b\"\\r\\n\"\n    b\"meow\\r\\n\"\n    b\"--boundary--\\r\\n\"\n)\nheaders = {\"Content-Type\": \"multipart/form-data; boundary=boundary\"}\n\n\ndef on_field(field):\n    print(\"Field:\", field.field_name, \"=\", field.value)\n\n\ndef on_file(file):\n    file.file_object.seek(0)\n    print(\"File:\", file.field_name, file.file_name, file.file_object.read())\n\n\nparse_form(headers, BytesIO(body), on_field, on_file)\n```\n\nOutput:\n\n```text\nField: b'username' = b'alice'\nFile: b'avatar' b'cat.txt' b'meow'\n```\n\n`parse_form` reads the body in chunks and calls your functions:\n\n- `on_field` runs for every text field.\n- `on_file` runs for every uploaded file.\n\nSmall files stay in memory. Once a file grows past 1 MiB, it is moved to a temporary file on disk, so a large upload does not fill up your memory.\n\n> **Real servers do not use `BytesIO`.** In a real application, the body comes from the network. Any object with a `read()` method that returns `bytes` works.\n\n### Handle each chunk yourself\n\n`parse_form` still saves every file somewhere. When you want full control, for example to send an upload straight to cloud storage, use `MultipartParser`:\n\n```python\nfrom python_multipart import MultipartParser\n\nchunks = [\n    b\"--boundary\\r\\n\",\n    b'Content-Disposition: form-data; name=\"avatar\"; filename=\"cat.txt\"\\r\\n\\r\\n',\n    b\"me\",\n    b\"ow\\r\\n--boundary--\\r\\n\",\n]\n\n\ndef on_part_data(data, start, end):\n    print(\"Got a piece of the file:\", data[start:end])\n\n\nparser = MultipartParser(\"boundary\", callbacks={\"on_part_data\": on_part_data})\nfor chunk in chunks:\n    parser.write(chunk)\nparser.finalize()\n```\n\nOutput:\n\n```text\nGot a piece of the file: b'me'\nGot a piece of the file: b'ow'\n```\n\nThe file arrived in two chunks, and you saw each one as it arrived. Nothing was stored.\n\nInstead of copying data, the parser passes you a buffer plus `start` and `end` positions that mark the part you care about.\n\n## Learn more\n\n- [Documentation](https://kludex.github.io/python-multipart/)\n- [API reference](https://kludex.github.io/python-multipart/api/)\n- [Changelog](https://github.com/Kludex/python-multipart/blob/main/CHANGELOG.md)\n\n## License\n\nApache 2.0. See [LICENSE.txt](LICENSE.txt).\n",
+        "description_content_type": "text/markdown",
+        "author_email": "Andrew Dunham <andrew@du.nham.ca>",
+        "maintainer_email": "Marcelo Trylesinski <marcelotryle@gmail.com>",
+        "license_expression": "Apache-2.0",
+        "license_file": [
+          "LICENSE.txt"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Environment :: Web Environment",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: Apache Software License",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3 :: Only",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15",
+          "Topic :: Software Development :: Libraries :: Python Modules"
+        ],
+        "requires_python": ">=3.11",
+        "project_url": [
+          "Homepage, https://github.com/Kludex/python-multipart",
+          "Documentation, https://kludex.github.io/python-multipart/",
+          "Changelog, https://github.com/Kludex/python-multipart/blob/master/CHANGELOG.md",
+          "Source, https://github.com/Kludex/python-multipart"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/88/2e/947cfe02def9371c07cd5bf5b6b61c829e9aecb9904db02a66cfafbc1eec/starlette-1.10.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=478c0ab3b4ced6e82719849c118fa406f0278a3499c1a898cd15cd31bdc38ce4",
+          "hashes": {
+            "sha256": "478c0ab3b4ced6e82719849c118fa406f0278a3499c1a898cd15cd31bdc38ce4"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.5",
+        "name": "starlette",
+        "version": "1.10.0",
+        "summary": "The little ASGI library that shines.",
+        "description": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/Kludex/starlette/main/docs/img/starlette_dark.svg\" width=\"420px\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/Kludex/starlette/main/docs/img/starlette.svg\" width=\"420px\">\n    <img alt=\"starlette-logo\" src=\"https://raw.githubusercontent.com/Kludex/starlette/main/docs/img/starlette.svg\">\n  </picture>\n</p>\n\n<p align=\"center\">\n    <em>✨ The little ASGI framework that shines. ✨</em>\n</p>\n\n---\n\n[![Build Status](https://github.com/Kludex/starlette/workflows/Test%20Suite/badge.svg)](https://github.com/Kludex/starlette/actions)\n[![Package version](https://badge.fury.io/py/starlette.svg)](https://pypi.python.org/pypi/starlette)\n[![Supported Python Version](https://img.shields.io/pypi/pyversions/starlette.svg?color=%2334D058)](https://pypi.org/project/starlette)\n[![Discord](https://img.shields.io/discord/1051468649518616576?logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/RxKUF5JuHs)\n\n---\n\n**Documentation**: <a href=\"https://starlette.dev/\" target=\"_blank\">https://starlette.dev</a>\n\n**Source Code**: <a href=\"https://github.com/Kludex/starlette\" target=\"_blank\">https://github.com/Kludex/starlette</a>\n\n---\n\n# Starlette\n\nStarlette is a lightweight [ASGI][asgi] framework/toolkit,\nwhich is ideal for building async web services in Python.\n\nIt is production-ready, and gives you the following:\n\n* A lightweight, low-complexity HTTP web framework.\n* WebSocket support.\n* In-process background tasks.\n* Startup and shutdown events.\n* Test client built on `httpx2`.\n* CORS, GZip, Static Files, Streaming responses.\n* Session and Cookie support.\n* 100% test coverage.\n* 100% type annotated codebase.\n* Few hard dependencies.\n* Compatible with `asyncio` and `trio` backends.\n* Great overall performance [against independent benchmarks][techempower].\n\n## Installation\n\n```shell\n$ pip install starlette\n```\n\nYou'll also want to install an ASGI server, such as [uvicorn](https://uvicorn.dev) or any of the [other ASGI server implementations](https://asgi.readthedocs.io/en/latest/implementations.html#servers).\n\n```shell\n$ pip install uvicorn\n```\n\n## Example\n\n```python title=\"main.py\"\nfrom starlette.applications import Starlette\nfrom starlette.responses import JSONResponse\nfrom starlette.routing import Route\n\n\nasync def homepage(request):\n    return JSONResponse({'hello': 'world'})\n\nroutes = [\n    Route(\"/\", endpoint=homepage)\n]\n\napp = Starlette(debug=True, routes=routes)\n```\n\nThen run the application using Uvicorn:\n\n```shell\n$ uvicorn main:app\n```\n\n## Dependencies\n\nStarlette only requires `anyio`, and the following are optional:\n\n* [`httpx2`][httpx2] - Required if you want to use the `TestClient`.\n* [`jinja2`][jinja2] - Required if you want to use `Jinja2Templates`.\n* [`opentelemetry-api`][opentelemetry-api] - Required for `OpenTelemetryMiddleware`.\n* [`python-multipart`][python-multipart] - Required if you want to support form parsing, with `request.form()`.\n* [`itsdangerous`][itsdangerous] - Required for `SessionMiddleware` support.\n* [`pyyaml`][pyyaml] - Required for `SchemaGenerator` support.\n\nYou can install all of these with `pip install starlette[full]`.\n\n## Framework or Toolkit\n\nStarlette is designed to be used either as a complete framework, or as\nan ASGI toolkit. You can use any of its components independently.\n\n```python\nfrom starlette.responses import PlainTextResponse\n\n\nasync def app(scope, receive, send):\n    assert scope['type'] == 'http'\n    response = PlainTextResponse('Hello, world!')\n    await response(scope, receive, send)\n```\n\nRun the `app` application in `example.py`:\n\n```shell\n$ uvicorn example:app\nINFO: Started server process [11509]\nINFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)\n```\n\nRun uvicorn with `--reload` to enable auto-reloading on code changes.\n\n## Modularity\n\nThe modularity that Starlette is designed on promotes building reusable\ncomponents that can be shared between any ASGI framework. This should enable\nan ecosystem of shared middleware and mountable applications.\n\nThe clean API separation also means it's easier to understand each component\nin isolation.\n\n---\n\n<p align=\"center\"><i>Starlette is <a href=\"https://github.com/Kludex/starlette/blob/main/LICENSE.md\">BSD licensed</a> code.<br/>Designed & crafted with care.</i></br>&mdash; ⭐️ &mdash;</p>\n\n[asgi]: https://asgi.readthedocs.io/en/latest/\n[httpx2]: https://pypi.org/project/httpx2/\n[jinja2]: https://jinja.palletsprojects.com/\n[opentelemetry-api]: https://opentelemetry.io/docs/languages/python/api/\n[python-multipart]: https://multipart.fastapiexpert.com/\n[itsdangerous]: https://itsdangerous.palletsprojects.com/\n[sqlalchemy]: https://www.sqlalchemy.org\n[pyyaml]: https://pyyaml.org/wiki/PyYAMLDocumentation\n[techempower]: https://github.com/TechEmpower/FrameworkBenchmarks\n",
+        "description_content_type": "text/markdown",
+        "author_email": "Tom Christie <tom@tomchristie.com>",
+        "maintainer_email": "Marcelo Trylesinski <marcelotryle@gmail.com>",
+        "license_expression": "BSD-3-Clause",
+        "license_file": [
+          "LICENSE.md"
+        ],
+        "classifier": [
+          "Development Status :: 3 - Alpha",
+          "Environment :: Web Environment",
+          "Framework :: AnyIO",
+          "Intended Audience :: Developers",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15",
+          "Topic :: Internet :: WWW/HTTP"
+        ],
+        "requires_dist": [
+          "anyio<5,>=4.0.0",
+          "typing-extensions>=4.10.0; python_version < '3.13'",
+          "httpx2>=2.0.0; extra == 'full'",
+          "httpx<0.29.0,>=0.27.0; extra == 'full'",
+          "itsdangerous; extra == 'full'",
+          "jinja2; extra == 'full'",
+          "opentelemetry-api; extra == 'full'",
+          "python-multipart>=0.0.18; extra == 'full'",
+          "pyyaml; extra == 'full'"
+        ],
+        "requires_python": ">=3.11",
+        "project_url": [
+          "Homepage, https://github.com/Kludex/starlette",
+          "Documentation, https://starlette.dev/",
+          "Changelog, https://starlette.dev/release-notes/",
+          "Funding, https://github.com/sponsors/Kludex",
+          "Source, https://github.com/Kludex/starlette"
+        ],
+        "provides_extra": [
+          "full"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/38/0c/b54a4fdd7f90a3af8b02ebc9ce6712c2c208b7926a2f7bad95c33ebbe943/uvicorn-0.54.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf",
+          "hashes": {
+            "sha256": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.5",
+        "name": "uvicorn",
+        "version": "0.54.0",
+        "summary": "The lightning-fast ASGI server.",
+        "description": "<p align=\"center\">\n  <img width=\"320\" height=\"320\" src=\"https://raw.githubusercontent.com/tomchristie/uvicorn/main/docs/uvicorn.png\" alt='uvicorn'>\n</p>\n\n<p align=\"center\">\n<em>An ASGI web server, for Python.</em>\n</p>\n\n---\n\n[![Build Status](https://github.com/Kludex/uvicorn/workflows/Test%20Suite/badge.svg)](https://github.com/Kludex/uvicorn/actions)\n[![Package version](https://badge.fury.io/py/uvicorn.svg)](https://pypi.python.org/pypi/uvicorn)\n[![Supported Python Version](https://img.shields.io/pypi/pyversions/uvicorn.svg?color=%2334D058)](https://pypi.org/project/uvicorn)\n[![Discord](https://img.shields.io/discord/1051468649518616576?logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/RxKUF5JuHs)\n\n---\n\n**Documentation**: [https://uvicorn.dev](https://uvicorn.dev)\n\n**Source Code**: [https://www.github.com/Kludex/uvicorn](https://www.github.com/Kludex/uvicorn)\n\n---\n\nUvicorn is an ASGI web server implementation for Python.\n\nUntil recently Python has lacked a minimal low-level server/application interface for\nasync frameworks. The [ASGI specification][asgi] fills this gap, and means we're now able to\nstart building a common set of tooling usable across all async frameworks.\n\nUvicorn currently supports HTTP/1.1, HTTP/2 and WebSockets.\n\n## Quickstart\n\nInstall using `pip`:\n\n```shell\n$ pip install uvicorn\n```\n\nThis will install uvicorn with minimal (pure Python) dependencies.\n\n```shell\n$ pip install 'uvicorn[standard]'\n```\n\nThis will install uvicorn with \"Cython-based\" dependencies (where possible) and other \"optional extras\".\n\nIn this context, \"Cython-based\" means the following:\n\n- the event loop `uvloop` will be installed and used if possible.\n- the http protocol will be handled by `httptools` if possible.\n\nMoreover, \"optional extras\" means that:\n\n- the websocket protocol will be handled by `websockets` (should you want to use `wsproto` you'd need to install it manually) if possible.\n- the `--reload` flag in development mode will use `watchfiles`.\n- `python-dotenv` will be installed should you want to use the `--env-file` option.\n- `PyYAML` will be installed to allow you to provide a `.yaml` file to `--log-config`, if desired.\n\nCreate an application, in `example.py`:\n\n```python\nasync def app(scope, receive, send):\n    assert scope['type'] == 'http'\n\n    await send({\n        'type': 'http.response.start',\n        'status': 200,\n        'headers': [\n            (b'content-type', b'text/plain'),\n        ],\n    })\n    await send({\n        'type': 'http.response.body',\n        'body': b'Hello, world!',\n    })\n```\n\nRun the server:\n\n```shell\n$ uvicorn example:app\n```\n\n---\n\n## Why ASGI?\n\nMost well established Python Web frameworks started out as WSGI-based frameworks.\n\nWSGI applications are a single, synchronous callable that takes a request and returns a response.\nThis doesn’t allow for long-lived connections, like you get with long-poll HTTP or WebSocket connections,\nwhich WSGI doesn't support well.\n\nHaving an async concurrency model also allows for options such as lightweight background tasks,\nand can be less of a limiting factor for endpoints that have long periods being blocked on network\nI/O such as dealing with slow HTTP requests.\n\n---\n\n## Alternative ASGI servers\n\nA strength of the ASGI protocol is that it decouples the server implementation\nfrom the application framework. This allows for an ecosystem of interoperating\nwebservers and application frameworks.\n\n### Daphne\n\nThe first ASGI server implementation, originally developed to power Django Channels, is [the Daphne webserver][daphne].\n\nIt is run widely in production, and supports HTTP/1.1, HTTP/2, and WebSockets.\n\nAny of the example applications given here can equally well be run using `daphne` instead.\n\n```\n$ pip install daphne\n$ daphne app:App\n```\n\n### Hypercorn\n\n[Hypercorn][hypercorn] was initially part of the Quart web framework, before\nbeing separated out into a standalone ASGI server.\n\nHypercorn supports HTTP/1.1, HTTP/2, and WebSockets.\n\nIt also supports [the excellent `trio` async framework][trio], as an alternative to `asyncio`.\n\n```\n$ pip install hypercorn\n$ hypercorn app:App\n```\n\n### Mangum\n\n[Mangum][mangum] is an adapter for using ASGI applications with AWS Lambda & API Gateway.\n\n### Granian\n\n[Granian][granian] is an ASGI compatible Rust HTTP server which supports HTTP/2, TLS and WebSockets.\n\n---\n\n<p align=\"center\"><i>Uvicorn is <a href=\"https://github.com/Kludex/uvicorn/blob/main/LICENSE.md\">BSD licensed</a> code.<br/>Designed & crafted with care.</i><br/>&mdash; 🦄  &mdash;</p>\n\n[asgi]: https://asgi.readthedocs.io/en/latest/\n[daphne]: https://github.com/django/daphne\n[hypercorn]: https://github.com/pgjones/hypercorn\n[trio]: https://trio.readthedocs.io\n[mangum]: https://github.com/jordaneremieff/mangum\n[granian]: https://github.com/emmett-framework/granian\n",
+        "description_content_type": "text/markdown",
+        "author_email": "Tom Christie <tom@tomchristie.com>",
+        "maintainer_email": "Marcelo Trylesinski <marcelotryle@gmail.com>",
+        "license_expression": "BSD-3-Clause",
+        "license_file": [
+          "LICENSE.md"
+        ],
+        "classifier": [
+          "Development Status :: 4 - Beta",
+          "Environment :: Web Environment",
+          "Intended Audience :: Developers",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy",
+          "Topic :: Internet :: WWW/HTTP"
+        ],
+        "requires_dist": [
+          "click>=7.0",
+          "h11>=0.8",
+          "typing-extensions>=4.0; python_version < '3.11'",
+          "httptools>=0.8.0; extra == 'standard'",
+          "python-dotenv>=0.13; extra == 'standard'",
+          "pyyaml>=5.1; extra == 'standard'",
+          "uvloop>=0.15.1; (sys_platform != 'win32' and (sys_platform != 'cygwin' and platform_python_implementation != 'PyPy')) and extra == 'standard'",
+          "watchfiles>=0.20; extra == 'standard'",
+          "websockets>=13.0; extra == 'standard'"
+        ],
+        "requires_python": ">=3.10",
+        "project_url": [
+          "Changelog, https://uvicorn.dev/release-notes",
+          "Funding, https://github.com/sponsors/Kludex",
+          "Homepage, https://uvicorn.dev/",
+          "Source, https://github.com/Kludex/uvicorn"
+        ],
+        "provides_extra": [
+          "standard"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/6d/85/2496a24de80c215b55a15f037bc368a2ed0ce7ecb1e909039ff4e76395de/websockets-17.4-cp314-cp314-win_amd64.whl",
+        "archive_info": {
+          "hash": "sha256=70293c25d79d1f084fdd665894481547575e429d2a75e8d72caec2f6b6b07af8",
+          "hashes": {
+            "sha256": "70293c25d79d1f084fdd665894481547575e429d2a75e8d72caec2f6b6b07af8"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "websockets",
+        "version": "17.4",
+        "dynamic": [
+          "description",
+          "description-content-type",
+          "license-file"
+        ],
+        "summary": "An implementation of the WebSocket Protocol (RFC 6455 & 7692)",
+        "description": ".. image:: logo/horizontal.svg\n   :width: 480px\n   :alt: websockets\n\n|licence| |version| |pyversions|\n\n.. |licence| image:: https://img.shields.io/pypi/l/websockets.svg\n    :target: https://pypi.python.org/pypi/websockets\n\n.. |version| image:: https://img.shields.io/pypi/v/websockets.svg\n    :target: https://pypi.python.org/pypi/websockets\n\n.. |pyversions| image:: https://img.shields.io/pypi/pyversions/websockets.svg\n    :target: https://pypi.python.org/pypi/websockets\n\nWhat is ``websockets``?\n-----------------------\n\nwebsockets is a library for building WebSocket_ servers and clients in Python\nwith a focus on correctness, simplicity, robustness, and performance.\n\n.. _WebSocket: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API\n\nBuilt on top of ``asyncio``, Python's standard asynchronous I/O framework, the\ndefault implementation provides an elegant coroutine-based API.\n\nImplementations on top of ``threading`` and ``trio`` are also provided, as well\nas a Sans-I/O layer for integration in third-party projects.\n\n`Documentation is available on Read the Docs. <https://websockets.readthedocs.io/>`_\n\n.. copy-pasted because GitHub doesn't support the include directive\n\nHere's an echo server with the ``asyncio`` API:\n\n.. code:: python\n\n    #!/usr/bin/env python\n\n    import asyncio\n    from websockets.asyncio.server import serve\n\n    async def echo(websocket):\n        async for message in websocket:\n            await websocket.send(message)\n\n    async def main():\n        server = await serve(echo, \"localhost\", 8765)\n        await server.serve_forever()\n\n    asyncio.run(main())\n\nHere's how a client sends and receives messages with the ``threading`` API:\n\n.. code:: python\n\n    #!/usr/bin/env python\n\n    from websockets.sync.client import connect\n\n    def hello():\n        with connect(\"ws://localhost:8765\") as websocket:\n            websocket.send(\"Hello world!\")\n            message = websocket.recv()\n            print(f\"Received: {message}\")\n\n    hello()\n\n\nDoes that look good?\n\n`Get started with the tutorial! <https://websockets.readthedocs.io/en/stable/intro/index.html>`_\n\nWhy should I use ``websockets``?\n--------------------------------\n\nThe development of ``websockets`` is shaped by four principles:\n\n1. **Correctness**: ``websockets`` is heavily tested for compliance with\n   :rfc:`6455`. Continuous integration fails under 100% branch coverage.\n\n2. **Simplicity**: all you need to understand is ``msg = await ws.recv()`` and\n   ``await ws.send(msg)``. ``websockets`` takes care of managing connections\n   so you can focus on your application.\n\n3. **Robustness**: ``websockets`` is built for production. For example, it was\n   the only library to `handle backpressure correctly`_ before the issue\n   became widely known in the Python community.\n\n4. **Performance**: memory usage is optimized and configurable. A C extension\n   accelerates expensive operations. It's pre-compiled for Linux, macOS and\n   Windows and packaged in the wheel format for each system and Python version.\n\nDocumentation is a first class concern in the project. Head over to `Read the\nDocs`_ and see for yourself.\n\n.. _Read the Docs: https://websockets.readthedocs.io/\n.. _handle backpressure correctly: https://vorpus.org/blog/some-thoughts-on-asynchronous-api-design-in-a-post-asyncawait-world/#websocket-servers\n\nWhy shouldn't I use ``websockets``?\n-----------------------------------\n\n* If you prefer callbacks over coroutines: ``websockets`` was created to\n  provide the best coroutine-based API to manage WebSocket connections in\n  Python. Pick another library for a callback-based API.\n\n* If you're looking for a mixed HTTP / WebSocket library: ``websockets`` aims\n  at being an excellent implementation of :rfc:`6455`: The WebSocket Protocol\n  and :rfc:`7692`: Compression Extensions for WebSocket. Its support for HTTP\n  is minimal — just enough for an HTTP health check.\n\n  If you want to do both in the same server, look at HTTP + WebSocket servers\n  that build on top of ``websockets`` to support WebSocket connections, like\n  uvicorn_ or Sanic_.\n\n.. _uvicorn: https://uvicorn.dev/\n.. _Sanic: https://sanic.dev/en/\n\nWhat else?\n----------\n\nBug reports, patches and suggestions are welcome!\n\nTo report a security vulnerability, please use the `Tidelift security\ncontact`_. Tidelift will coordinate the fix and disclosure.\n\n.. _Tidelift security contact: https://tidelift.com/security\n\nFor anything else, please open an issue_ or send a `pull request`_.\n\n.. _issue: https://github.com/python-websockets/websockets/issues/new\n.. _pull request: https://github.com/python-websockets/websockets/compare/\n\nParticipants must uphold the `Contributor Covenant code of conduct`_.\n\n.. _Contributor Covenant code of conduct: https://github.com/python-websockets/websockets/blob/main/CODE_OF_CONDUCT.md\n\n``websockets`` is released under the `BSD license`_.\n\n.. _BSD license: https://github.com/python-websockets/websockets/blob/main/LICENSE\n",
+        "description_content_type": "text/x-rst",
+        "keywords": [
+          "WebSocket"
+        ],
+        "author_email": "Aymeric Augustin <aymeric.augustin@m4x.org>",
+        "license_expression": "BSD-3-Clause",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Environment :: Web Environment",
+          "Intended Audience :: Developers",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15"
+        ],
+        "requires_python": ">=3.11",
+        "project_url": [
+          "Homepage, https://github.com/python-websockets/websockets",
+          "Changelog, https://websockets.readthedocs.io/en/stable/project/changelog.html",
+          "Documentation, https://websockets.readthedocs.io/",
+          "Funding, https://tidelift.com/subscription/pkg/pypi-websockets?utm_source=pypi-websockets&utm_medium=referral&utm_campaign=readme",
+          "Tracker, https://github.com/python-websockets/websockets/issues"
+        ]
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.14.3",
+    "os_name": "nt",
+    "platform_machine": "AMD64",
+    "platform_release": "11",
+    "platform_system": "Windows",
+    "platform_version": "10.0.26300",
+    "python_full_version": "3.14.3",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.14",
+    "sys_platform": "win32"
+  }
+}

@@ -1,0 +1,11 @@
+# Direct runtime dependencies; resolved environment in requirements-lock.txt.
+streamlit==1.67.0
+openai==2.8.1
+pydantic==2.12.5
+python-dotenv==1.2.1
+Faker==37.12.0
+PyYAML==6.0.3
+sqlglot==28.0.0
+sentence-transformers==6.3.0
+Pillow==13.0.0
+matplotlib==3.10.8

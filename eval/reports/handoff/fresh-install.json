@@ -1,0 +1,35 @@
+{
+  "python": "3.14.3",
+  "environment": "new external temporary virtualenv; full requirements-lock.txt install",
+  "database_counts": {
+    "customers": 160,
+    "products": 72,
+    "sessions": 2400,
+    "orders": 400,
+    "order_items": 580,
+    "returns": 43
+  },
+  "database_matches_verified_snapshot": true,
+  "tests": {
+    "tests": "598",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "1",
+    "time": "183.421"
+  },
+  "pip_check": "passed",
+  "headless_http_health": "passed",
+  "offline_dev_mode": "lookup",
+  "paid_calls": 0,
+  "demo": "8 outcomes verified",
+  "platform": "win32",
+  "local_model_check": {
+    "embedding_shape": [
+      1,
+      384
+    ],
+    "cross_encoder_scores": 1,
+    "network": "disabled; reused existing public cached weights"
+  },
+  "temporary_environment_removed": true
+}

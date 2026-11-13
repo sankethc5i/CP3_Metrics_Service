@@ -1,0 +1,2 @@
+mode,questions,recall_at_k,mrr,ndcg_at_k,retrieval_denominator,retrieval_p50_ms,retrieval_p95_ms
+lookup,3,1.0,1.0,1.0,3,0.5974000014248304,0.9413799980393378

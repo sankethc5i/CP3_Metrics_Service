@@ -1,0 +1,738 @@
+# Governed, hand-authored SQL definitions; never supplied by an LLM.
+version: 1
+as_of_date: "2026-11-01"
+currency: "USD"
+dimensions:
+  -
+    id: "order_region"
+    description: "Shipping/order region captured on the order; may differ from customer region."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "orders.region"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "orders.region"
+        joins: []
+  -
+    id: "customer_region"
+    description: "Customer profile region; unqualified region requires clarification."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "customers.region"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+          -
+            source: "orders.customer_id"
+            target: "customers.customer_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "customers.region"
+        joins:
+          -
+            source: "orders.customer_id"
+            target: "customers.customer_id"
+            cardinality: "many_to_one"
+      customers:
+        column: "customers.region"
+        joins: []
+      sessions:
+        column: "customers.region"
+        joins:
+          -
+            source: "sessions.customer_id"
+            target: "customers.customer_id"
+            cardinality: "many_to_one"
+  -
+    id: "category"
+    description: "Purchased product category at line grain."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "products.category"
+        joins:
+          -
+            source: "order_items.product_id"
+            target: "products.product_id"
+            cardinality: "many_to_one"
+  -
+    id: "brand"
+    description: "Purchased product brand at line grain."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "products.brand"
+        joins:
+          -
+            source: "order_items.product_id"
+            target: "products.product_id"
+            cardinality: "many_to_one"
+  -
+    id: "device"
+    description: "Device on the attributed session."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "sessions.device_type"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+          -
+            source: "orders.session_id"
+            target: "sessions.session_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "sessions.device_type"
+        joins:
+          -
+            source: "orders.session_id"
+            target: "sessions.session_id"
+            cardinality: "many_to_one"
+      sessions:
+        column: "sessions.device_type"
+        joins: []
+  -
+    id: "traffic_source"
+    description: "Traffic source on the attributed session."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "sessions.traffic_source"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+          -
+            source: "orders.session_id"
+            target: "sessions.session_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "sessions.traffic_source"
+        joins:
+          -
+            source: "orders.session_id"
+            target: "sessions.session_id"
+            cardinality: "many_to_one"
+      sessions:
+        column: "sessions.traffic_source"
+        joins: []
+  -
+    id: "age_group"
+    description: "Synthetic customer age band."
+    transform: "identity"
+    sources:
+      order_items:
+        column: "customers.age_group"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+          -
+            source: "orders.customer_id"
+            target: "customers.customer_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "customers.age_group"
+        joins:
+          -
+            source: "orders.customer_id"
+            target: "customers.customer_id"
+            cardinality: "many_to_one"
+      customers:
+        column: "customers.age_group"
+        joins: []
+      sessions:
+        column: "customers.age_group"
+        joins:
+          -
+            source: "sessions.customer_id"
+            target: "customers.customer_id"
+            cardinality: "many_to_one"
+  -
+    id: "month"
+    description: "Calendar YYYY-MM using the metric base date; not a join to a calendar table."
+    transform: "month"
+    sources:
+      order_items:
+        column: "orders.order_date"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "orders.order_date"
+        joins: []
+      customers:
+        column: "customers.signup_date"
+        joins: []
+      sessions:
+        column: "sessions.session_date"
+        joins: []
+  -
+    id: "quarter"
+    description: "Calendar YYYY-Q1 through YYYY-Q4 using the metric base date."
+    transform: "quarter"
+    sources:
+      order_items:
+        column: "orders.order_date"
+        joins:
+          -
+            source: "order_items.order_id"
+            target: "orders.order_id"
+            cardinality: "many_to_one"
+      orders:
+        column: "orders.order_date"
+        joins: []
+      customers:
+        column: "customers.signup_date"
+        joins: []
+      sessions:
+        column: "sessions.session_date"
+        joins: []
+metrics:
+  -
+    id: "order_lines"
+    display_name: "Order lines"
+    description: "Count warehouse order-line rows, irrespective of quantity."
+    formula: "SELECT COUNT(*) FROM order_items JOIN orders ON orders.order_id=order_items.order_id WHERE orders.order_date < :as_of_date"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+    synonyms:
+      - "line count"
+      - "order line count"
+    unit: "count"
+    business_rules:
+      - "COUNT(*) on order_items, not units and not orders."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "orders"
+    display_name: "Orders"
+    description: "Count distinct submitted orders, including cancelled and pending."
+    formula: "SELECT COUNT(DISTINCT order_id) FROM orders WHERE order_date < :as_of_date"
+    base_table: "orders"
+    grain: "one order"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+    synonyms:
+      - "order count"
+      - "submitted orders"
+    unit: "count"
+    business_rules:
+      - "COUNT(DISTINCT order_id); never COUNT(*) over joined lines."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+  -
+    id: "units_sold"
+    display_name: "Units sold"
+    description: "Recognized item quantities before returns; returned units are not inferred from refund amounts."
+    formula: "SELECT COALESCE(SUM(quantity),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "units"
+      - "quantity sold"
+    unit: "count"
+    business_rules:
+      - "SUM(quantity), not line count; includes sold units subsequently refunded."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "gross_revenue"
+    display_name: "Gross revenue"
+    description: "Recognized merchandise revenue before discounts and refunds."
+    formula: "SELECT (SELECT COALESCE(SUM(quantity*unit_price),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "gross sales"
+      - "gross merchandise revenue"
+    unit: "USD"
+    business_rules:
+      - "Sum quantity*unit_price once per line; excludes shipping and tax; no order amounts joined into a sum."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "net_revenue"
+    display_name: "Net revenue"
+    description: "Recognized merchandise gross less line discounts, allocated order discounts, and refunds."
+    formula: "SELECT (SELECT COALESCE(SUM(line_total-allocated_order_discount-refund_cents),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "net sales"
+      - "net merchandise revenue"
+    unit: "USD"
+    business_rules:
+      - "commerce_lines allocates each order discount once and preaggregates refunds to one row per line. Tax and shipping excluded."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "aov"
+    display_name: "Average order value"
+    description: "Net recognized merchandise revenue per distinct eligible order."
+    formula: "SELECT 1.0*(SELECT (SELECT COALESCE(SUM(line_total-allocated_order_discount-refund_cents),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0)/NULLIF((SELECT COUNT(DISTINCT order_id) FROM orders WHERE status IN ('completed','returned') AND order_date < :as_of_date),0)"
+    base_table: "orders"
+    grain: "one order; numerator preaggregates lines"
+    numerator: "SELECT (SELECT COALESCE(SUM(line_total-allocated_order_discount-refund_cents),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0"
+    denominator: "SELECT COUNT(DISTINCT order_id) FROM orders WHERE status IN ('completed','returned') AND order_date < :as_of_date"
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "average order value"
+      - "average basket value"
+    unit: "USD"
+    business_rules:
+      - "Aggregate net revenue before division by distinct eligible orders; never sum order-level amounts across lines."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+  -
+    id: "gross_margin"
+    display_name: "Gross margin"
+    description: "Net merchandise revenue less historical cost of sold units."
+    formula: "SELECT (SELECT COALESCE(SUM(line_total-allocated_order_discount-refund_cents-quantity*cost_per_unit),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "gross profit"
+      - "merchandise margin"
+    unit: "USD"
+    business_rules:
+      - "Absolute USD margin, not margin percentage. Returned goods have no COGS recovery; costs count once per line."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "discount_rate"
+    display_name: "Discount rate"
+    description: "Line discounts plus allocated order discounts divided by gross merchandise revenue."
+    formula: "SELECT 1.0*(SELECT COALESCE(SUM(line_discount+allocated_order_discount),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/NULLIF((SELECT COALESCE(SUM(quantity*unit_price),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date),0)"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: "SELECT COALESCE(SUM(line_discount+allocated_order_discount),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date"
+    denominator: "SELECT COALESCE(SUM(quantity*unit_price),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date"
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "discount percentage"
+      - "merchandise discount rate"
+    unit: "ratio"
+    business_rules:
+      - "Ratio of sums; order discount is allocated once per order, not repeated for each joined line."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "cancellation_rate"
+    display_name: "Cancellation rate"
+    description: "Cancelled submitted orders divided by all submitted orders."
+    formula: "SELECT 1.0*(SELECT COUNT(DISTINCT order_id) FROM orders WHERE order_date < :as_of_date AND status='cancelled')/NULLIF((SELECT COUNT(DISTINCT order_id) FROM orders WHERE order_date < :as_of_date),0)"
+    base_table: "orders"
+    grain: "one order"
+    numerator: "SELECT COUNT(DISTINCT order_id) FROM orders WHERE order_date < :as_of_date AND status='cancelled'"
+    denominator: "SELECT COUNT(DISTINCT order_id) FROM orders WHERE order_date < :as_of_date"
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+    synonyms:
+      - "cancel rate"
+      - "cancelled order rate"
+    unit: "ratio"
+    business_rules:
+      - "Pending orders remain in denominator. Compute at order grain without joining lines."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+  -
+    id: "return_rate"
+    display_name: "Return rate"
+    description: "Refunded eligible order lines divided by all eligible order lines."
+    formula: "SELECT 1.0*(SELECT COUNT(*) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date AND refund_cents > 0)/NULLIF((SELECT COUNT(*) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date),0)"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: "SELECT COUNT(*) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date AND refund_cents > 0"
+    denominator: "SELECT COUNT(*) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date"
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "line return rate"
+      - "refunded line rate"
+    unit: "ratio"
+    business_rules:
+      - "Line-based, not unit-based or order-based. Any positive partial refund counts as one returned line; preaggregate refunds."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "new_customers"
+    display_name: "New customers"
+    description: "Customer signups in the requested period."
+    formula: "SELECT COUNT(*) FROM customers WHERE signup_date < :as_of_date"
+    base_table: "customers"
+    grain: "one customer signup"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "customer_region"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "customers.signup_date"
+      date_before: "AS_OF_DATE"
+    synonyms:
+      - "customer signups"
+      - "new registrations"
+    unit: "count"
+    business_rules:
+      - "New means signup, not first purchase; no order join required."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+  -
+    id: "repeat_purchase_rate"
+    display_name: "Repeat purchase rate"
+    description: "Customers with at least two eligible orders divided by customers with at least one eligible order."
+    formula: "SELECT 1.0*(SELECT COUNT(*) FROM (SELECT customer_id FROM orders WHERE status IN ('completed','returned') AND order_date < :as_of_date GROUP BY customer_id HAVING COUNT(DISTINCT order_id)>=2))/NULLIF((SELECT COUNT(DISTINCT customer_id) FROM orders WHERE status IN ('completed','returned') AND order_date < :as_of_date),0)"
+    base_table: "orders"
+    grain: "one customer within requested order-date period"
+    numerator: "SELECT COUNT(*) FROM (SELECT customer_id FROM orders WHERE status IN ('completed','returned') AND order_date < :as_of_date GROUP BY customer_id HAVING COUNT(DISTINCT order_id)>=2)"
+    denominator: "SELECT COUNT(DISTINCT customer_id) FROM orders WHERE status IN ('completed','returned') AND order_date < :as_of_date"
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "repeat customer rate"
+      - "repeat buyer rate"
+    unit: "ratio"
+    business_rules:
+      - "Group orders by customer first; distinct customers form denominator. Recompute for each period/group; do not average rates."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+  -
+    id: "conversion_rate"
+    display_name: "Conversion rate"
+    description: "Converted sessions divided by all sessions."
+    formula: "SELECT 1.0*(SELECT COUNT(*) FROM sessions WHERE session_date < :as_of_date AND converted=1)/NULLIF((SELECT COUNT(*) FROM sessions WHERE session_date < :as_of_date),0)"
+    base_table: "sessions"
+    grain: "one session"
+    numerator: "SELECT COUNT(*) FROM sessions WHERE session_date < :as_of_date AND converted=1"
+    denominator: "SELECT COUNT(*) FROM sessions WHERE session_date < :as_of_date"
+    allowed_dimensions:
+      - "customer_region"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "sessions.session_date"
+      date_before: "AS_OF_DATE"
+    synonyms:
+      - "session conversion rate"
+      - "visit conversion rate"
+    unit: "ratio"
+    business_rules:
+      - "Converted means submitted an order, including later cancellations; one order per converted session. No sessions-to-orders fan-out."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+  -
+    id: "discounts"
+    display_name: "Discounts"
+    description: "Recognized line discounts plus cent-exact allocated order discounts."
+    formula: "SELECT (SELECT COALESCE(SUM(line_discount+allocated_order_discount),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "total discounts"
+      - "merchandise discounts"
+    unit: "USD"
+    business_rules:
+      - "Sum line discounts and allocated order discounts only; never sum raw orders.order_discount across lines."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+  -
+    id: "refunds"
+    display_name: "Refunds"
+    description: "Refunded merchandise attributed to original recognized order date."
+    formula: "SELECT (SELECT COALESCE(SUM(refund_cents),0) FROM commerce_lines WHERE status IN ('completed','returned') AND order_date < :as_of_date)/100.0"
+    base_table: "order_items"
+    grain: "one order line"
+    numerator: null
+    denominator: null
+    allowed_dimensions:
+      - "order_region"
+      - "customer_region"
+      - "category"
+      - "brand"
+      - "device"
+      - "traffic_source"
+      - "age_group"
+      - "month"
+      - "quarter"
+    allowed_time_grains:
+      - "month"
+      - "quarter"
+    default_filters:
+      date_column: "orders.order_date"
+      date_before: "AS_OF_DATE"
+      status:
+        - "completed"
+        - "returned"
+    synonyms:
+      - "merchandise refunds"
+      - "refund amount"
+    unit: "USD"
+    business_rules:
+      - "Returns aggregate to line grain before joining. Snapshot only includes refunds before AS_OF_DATE; no shipping or tax refunds."
+      - "All dates are inclusive at period start and exclusive at period end. Global snapshot ends before AS_OF_DATE."
+      - "Zero denominators produce NULL; currency is USD, stored in integer cents; ratios are fractions."
+      - "The view commerce_lines preserves exactly one row per order_item_id."
+ambiguities:
+  -
+    term: "revenue"
+    choices:
+      - "gross_revenue"
+      - "net_revenue"
+    outcome: "clarify"
+    rule: "Ask: Do you mean gross revenue before discounts/refunds, or net revenue after both? Never select a default."
+  -
+    term: "region"
+    choices:
+      - "order_region"
+      - "customer_region"
+    outcome: "clarify"
+    rule: "Ask: Do you mean order/shipping region or customer profile region? Never infer a default from metric availability."

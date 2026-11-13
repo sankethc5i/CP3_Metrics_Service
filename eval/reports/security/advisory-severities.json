@@ -1,0 +1,622 @@
+[
+  {
+    "package": "pillow",
+    "advisory": "GHSA-4558-3h8r-v8xp",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-4rr5-89j8-mwwm",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-27h8-gf7j-v5hc",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-v9pv-5gc8-w2m6",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-4rm8-3hmm-39fg",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-9v9v-9qvf-h2hj",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-pchr-8j38-3x4p",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-p8hx-v2p6-rp84",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-3j72-p6qg-6xp7",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-5x8w-8jj5-q52h",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-g842-9rc4-69pw",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-xgh8-jp6q-p5x8",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-654x-cwwv-5j9c",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Arrow export leaks stale heap memory when PILLOW_ALIGNMENT > 1"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-7mwm-ghpf-9vrm",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Double free in ImagingScaleAffine on calloc failure via Image.transform"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-8g5g-8vmr-9782",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "CRITICAL",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Heap buffer overflow in ImagingJpegDecode"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-58r4-6rv3-gfh8",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Out-of-bounds access in _imagingmorph on a zero-width image"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-cp9v-662q-vvx9",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: NULL pointer dereference in Image.merge via an unvalidated band 0"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-g4qv-2jxx-769h",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: PNG eXIf chunk makes EXIF parsing run in quadratic time"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-xvh5-g6gv-559v",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": " Pillow: Memory disclosure and segfault in libtiff encoder via crafted TIFF tags"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-p4wg-p73j-c528",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Unbounded recursion parsing a PDF page tree or trailer chain (incomplete fix for CVE-2026-42310)"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-65qm-jvmh-6pqg",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: GIF seek keeps rejected size after DecompressionBombError, allowing DoS"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-q45j-58j2-45rg",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: TiffDecode returns uninitialized memory as pixels for short JPEG strips"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-462x-pgg6-55fp",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:L"
+      }
+    ],
+    "summary": "Pillow tiled-TIFF decoder reads past tile buffer in copy4 (Unpack.c:1290)"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-c6hw-5grf-ff96",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: OOB read in TiffDecode.c tile and RGBA paths leaks heap memory into pixels"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-vx6w-vv9f-6gvg",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: EPS load(scale) lets Ghostscript render past the decompression bomb limit"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-w889-685w-c8fh",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "CRITICAL",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Argument Injection in Ghostscript call, potentially leading into RCE"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-j4m9-6w36-pw47",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Invalid free in FreeType glyph rendering when a stroker is active"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-fc9g-5qg7-mf45",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Quadratic GIF comment copying during save"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-22hg-r758-rrw9",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "HIGH",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Infinite loop in MIC n_frames when the embedded TIFF"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-74r2-7ff9-mjj2",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: Quadratic GIF comment concatenation allows DoS in Image.open()"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-254f-3936-288h",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "Pillow: PdfParser can recurse without limit in get_value() and linearize_page_tree()"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-jg86-v3jv-hrpm",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-f2g6-542v-9j58",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-5xm2-6676-qcp9",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-gg2r-wvfm-q9rx",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-332p-7hrc-92wf",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-24rc-8hj2-v98c",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-mrfp-p49p-3hf2",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-g7cr-3p24-7wf7",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-78g4-xqwv-q3g8",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-xcvg-w56q-r89m",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pillow",
+    "advisory": "GHSA-wqgw-9xfh-qf2g",
+    "fix_versions": [
+      "13.0.0"
+    ],
+    "severity": "UNKNOWN",
+    "error": "Advisory metadata unavailable"
+  },
+  {
+    "package": "pip",
+    "advisory": "GHSA-6vgw-5pg2-w6jp",
+    "fix_versions": [
+      "26.0"
+    ],
+    "severity": "LOW",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "pip Path Traversal vulnerability"
+  },
+  {
+    "package": "pip",
+    "advisory": "GHSA-58qw-9mgm-455v",
+    "fix_versions": [
+      "26.1"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "pip has an interpretation conflict due to handling both concatenated tar and ZIP files as ZIP files"
+  },
+  {
+    "package": "pip",
+    "advisory": "GHSA-jp4c-xjxw-mgf9",
+    "fix_versions": [
+      "26.1"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:L/AC:L/AT:P/PR:H/UI:A/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "pip Vulnerable to Inclusion of Functionality from Untrusted Control Sphere"
+  },
+  {
+    "package": "pip",
+    "advisory": "GHSA-wf93-45jw-7689",
+    "fix_versions": [
+      "26.1.2"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H"
+      },
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:L/AC:L/AT:P/PR:L/UI:A/VC:N/VI:H/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": " pip: Path traversal in console_scripts/gui_scripts\u00a0entry point names allows installing scripts outside of target directory"
+  },
+  {
+    "package": "pip",
+    "advisory": "GHSA-qwm4-qh6w-59xr",
+    "fix_versions": [
+      "26.2.0"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:H/AT:P/PR:H/UI:A/VC:N/VI:H/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "pip would incorrectly handle doubly-encoded package URLs from indexes"
+  },
+  {
+    "package": "pytest",
+    "advisory": "GHSA-6w46-j5rx-g56g",
+    "fix_versions": [
+      "9.0.3"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L"
+      }
+    ],
+    "summary": "pytest has vulnerable tmpdir handling"
+  },
+  {
+    "package": "python-dotenv",
+    "advisory": "GHSA-mf9w-mj56-hr94",
+    "fix_versions": [
+      "1.2.2"
+    ],
+    "severity": "MODERATE",
+    "cvss": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:L/AC:L/PR:L/UI:R/S:U/C:N/I:H/A:H"
+      }
+    ],
+    "summary": "python-dotenv: Symlink following in set_key allows arbitrary file overwrite via cross-device rename fallback"
+  },
+  {
+    "package": "sentence-transformers",
+    "advisory": "GHSA-jhr6-gm9c-rqjv",
+    "fix_versions": [
+      "5.6.0"
+    ],
+    "severity": "CRITICAL",
+    "cvss": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }
+    ],
+    "summary": "sentence-transformers local model loading bypasses trust_remote_code and executes custom Python"
+  }
+]

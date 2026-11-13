@@ -1,0 +1,768 @@
+{
+  "phase": "upgraded",
+  "set_sha256": "58d8ecc660488973a3369293a5cb59e189e69e4622fe015dbf60b337358c665f",
+  "llm_calls": 0,
+  "outcome_method": "oracle argument replay; NOT model-selection accuracy",
+  "modes": {
+    "lookup": {
+      "cases": [
+        {
+          "id": "net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 101.68920000069193
+        },
+        {
+          "id": "gross",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 125.27590000172495
+        },
+        {
+          "id": "aov",
+          "expected_metric_id": "aov",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 83.40740000130609
+        },
+        {
+          "id": "orders",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 52.818799998931354
+        },
+        {
+          "id": "lines",
+          "expected_metric_id": "order_lines",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 55.37520000143559
+        },
+        {
+          "id": "units",
+          "expected_metric_id": "units_sold",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 121.48159999924246
+        },
+        {
+          "id": "conversion",
+          "expected_metric_id": "conversion_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 75.31019999805721
+        },
+        {
+          "id": "discount",
+          "expected_metric_id": "discount_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 85.04700000048615
+        },
+        {
+          "id": "cancel",
+          "expected_metric_id": "cancellation_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 72.89289999971515
+        },
+        {
+          "id": "repeat",
+          "expected_metric_id": "repeat_purchase_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 81.67690000118455
+        },
+        {
+          "id": "new",
+          "expected_metric_id": "new_customers",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 47.8886999990209
+        },
+        {
+          "id": "ambiguous_revenue",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 29.351200002565747
+        },
+        {
+          "id": "ambiguous_region",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 29.905999999755295
+        },
+        {
+          "id": "unknown_brand",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 34.12849999949685
+        },
+        {
+          "id": "undefined",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 28.76019999894197
+        },
+        {
+          "id": "bad_dimension",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 31.539100000372855
+        },
+        {
+          "id": "empty_net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 63.389200000528945
+        },
+        {
+          "id": "empty_orders",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 52.949199998693075
+        }
+      ],
+      "completed": 18,
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "oracle_outcome_correct": 18
+    },
+    "naive": {
+      "cases": [
+        {
+          "id": "net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 272.638200000074
+        },
+        {
+          "id": "gross",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 366.5664999971341
+        },
+        {
+          "id": "aov",
+          "expected_metric_id": "aov",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 294.18340000120224
+        },
+        {
+          "id": "orders",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 230.80860000118264
+        },
+        {
+          "id": "lines",
+          "expected_metric_id": "order_lines",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 242.73360000006505
+        },
+        {
+          "id": "units",
+          "expected_metric_id": "units_sold",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 382.1918000030564
+        },
+        {
+          "id": "conversion",
+          "expected_metric_id": "conversion_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 330.87109999905806
+        },
+        {
+          "id": "discount",
+          "expected_metric_id": "discount_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 315.8502000005683
+        },
+        {
+          "id": "cancel",
+          "expected_metric_id": "cancellation_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 258.0803000018932
+        },
+        {
+          "id": "repeat",
+          "expected_metric_id": "repeat_purchase_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 262.07589999830816
+        },
+        {
+          "id": "new",
+          "expected_metric_id": "new_customers",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 232.32329999882495
+        },
+        {
+          "id": "ambiguous_revenue",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 239.79400000098394
+        },
+        {
+          "id": "ambiguous_region",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 286.801900001592
+        },
+        {
+          "id": "unknown_brand",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 283.34179999728804
+        },
+        {
+          "id": "undefined",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 298.65029999928083
+        },
+        {
+          "id": "bad_dimension",
+          "expected_metric_id": "orders",
+          "rank": null,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 302.840099997411
+        },
+        {
+          "id": "empty_net",
+          "expected_metric_id": "net_revenue",
+          "rank": 2,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 314.238099999784
+        },
+        {
+          "id": "empty_orders",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 293.55669999858947
+        }
+      ],
+      "completed": 18,
+      "recall_at_k": 0.9375,
+      "mrr": 0.90625,
+      "oracle_outcome_correct": 18
+    },
+    "hybrid": {
+      "cases": [
+        {
+          "id": "net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 343.9671999985876
+        },
+        {
+          "id": "gross",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 397.2711000023992
+        },
+        {
+          "id": "aov",
+          "expected_metric_id": "aov",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 368.9809999996214
+        },
+        {
+          "id": "orders",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 334.9123000007239
+        },
+        {
+          "id": "lines",
+          "expected_metric_id": "order_lines",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 336.83250000103726
+        },
+        {
+          "id": "units",
+          "expected_metric_id": "units_sold",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 402.6735000006738
+        },
+        {
+          "id": "conversion",
+          "expected_metric_id": "conversion_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 348.4048000027542
+        },
+        {
+          "id": "discount",
+          "expected_metric_id": "discount_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 382.97199999942677
+        },
+        {
+          "id": "cancel",
+          "expected_metric_id": "cancellation_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 350.41240000282414
+        },
+        {
+          "id": "repeat",
+          "expected_metric_id": "repeat_purchase_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 342.0574999981909
+        },
+        {
+          "id": "new",
+          "expected_metric_id": "new_customers",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 332.137800000055
+        },
+        {
+          "id": "ambiguous_revenue",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 311.3999999986845
+        },
+        {
+          "id": "ambiguous_region",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 296.415299999353
+        },
+        {
+          "id": "unknown_brand",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 314.2699000018183
+        },
+        {
+          "id": "undefined",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 332.8701999998884
+        },
+        {
+          "id": "bad_dimension",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 308.1939000003331
+        },
+        {
+          "id": "empty_net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 332.041500001651
+        },
+        {
+          "id": "empty_orders",
+          "expected_metric_id": "orders",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 330.2944999995816
+        }
+      ],
+      "completed": 18,
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "oracle_outcome_correct": 18
+    },
+    "hybrid_rerank": {
+      "cases": [
+        {
+          "id": "net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 657.5542000027781
+        },
+        {
+          "id": "gross",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 653.6525000010442
+        },
+        {
+          "id": "aov",
+          "expected_metric_id": "aov",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 523.3557999999903
+        },
+        {
+          "id": "orders",
+          "expected_metric_id": "orders",
+          "rank": 2,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 521.2431999971159
+        },
+        {
+          "id": "lines",
+          "expected_metric_id": "order_lines",
+          "rank": 2,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 511.9866999993974
+        },
+        {
+          "id": "units",
+          "expected_metric_id": "units_sold",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 656.762799997523
+        },
+        {
+          "id": "conversion",
+          "expected_metric_id": "conversion_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 556.1727999993309
+        },
+        {
+          "id": "discount",
+          "expected_metric_id": "discount_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 568.0552999983774
+        },
+        {
+          "id": "cancel",
+          "expected_metric_id": "cancellation_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 487.33849999916856
+        },
+        {
+          "id": "repeat",
+          "expected_metric_id": "repeat_purchase_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 476.4184999985446
+        },
+        {
+          "id": "new",
+          "expected_metric_id": "new_customers",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 449.4749999976193
+        },
+        {
+          "id": "ambiguous_revenue",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 481.9206000029226
+        },
+        {
+          "id": "ambiguous_region",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 469.2814999980328
+        },
+        {
+          "id": "unknown_brand",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 449.24410000021453
+        },
+        {
+          "id": "undefined",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 461.80200000162586
+        },
+        {
+          "id": "bad_dimension",
+          "expected_metric_id": "orders",
+          "rank": 2,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 461.8074999998498
+        },
+        {
+          "id": "empty_net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 521.1326999997254
+        },
+        {
+          "id": "empty_orders",
+          "expected_metric_id": "orders",
+          "rank": 2,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 471.01049999764655
+        }
+      ],
+      "completed": 18,
+      "recall_at_k": 1.0,
+      "mrr": 0.875,
+      "oracle_outcome_correct": 18
+    },
+    "corrective": {
+      "cases": [
+        {
+          "id": "net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 431.69770000167773
+        },
+        {
+          "id": "gross",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 530.8445999980904
+        },
+        {
+          "id": "aov",
+          "expected_metric_id": "aov",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 410.36879999956
+        },
+        {
+          "id": "orders",
+          "expected_metric_id": "orders",
+          "rank": 2,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 409.4823000014003
+        },
+        {
+          "id": "lines",
+          "expected_metric_id": "order_lines",
+          "rank": 2,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 545.8553000025859
+        },
+        {
+          "id": "units",
+          "expected_metric_id": "units_sold",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 631.1291999991226
+        },
+        {
+          "id": "conversion",
+          "expected_metric_id": "conversion_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 555.7752000022447
+        },
+        {
+          "id": "discount",
+          "expected_metric_id": "discount_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 576.2125999972341
+        },
+        {
+          "id": "cancel",
+          "expected_metric_id": "cancellation_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 535.5238999982248
+        },
+        {
+          "id": "repeat",
+          "expected_metric_id": "repeat_purchase_rate",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 478.5044000018388
+        },
+        {
+          "id": "new",
+          "expected_metric_id": "new_customers",
+          "rank": 1,
+          "outcome": "answer",
+          "outcome_ok": true,
+          "latency_ms": 509.06120000217925
+        },
+        {
+          "id": "ambiguous_revenue",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 485.29620000044815
+        },
+        {
+          "id": "ambiguous_region",
+          "expected_metric_id": "gross_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 496.2618999998085
+        },
+        {
+          "id": "unknown_brand",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "clarify",
+          "outcome_ok": true,
+          "latency_ms": 484.4974000006914
+        },
+        {
+          "id": "undefined",
+          "expected_metric_id": null,
+          "rank": null,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 722.0398999997997
+        },
+        {
+          "id": "bad_dimension",
+          "expected_metric_id": "orders",
+          "rank": 2,
+          "outcome": "refuse",
+          "outcome_ok": true,
+          "latency_ms": 871.1425000001327
+        },
+        {
+          "id": "empty_net",
+          "expected_metric_id": "net_revenue",
+          "rank": 1,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 462.2330000020156
+        },
+        {
+          "id": "empty_orders",
+          "expected_metric_id": "orders",
+          "rank": 2,
+          "outcome": "empty_result",
+          "outcome_ok": true,
+          "latency_ms": 449.14750000316417
+        }
+      ],
+      "completed": 18,
+      "recall_at_k": 1.0,
+      "mrr": 0.875,
+      "oracle_outcome_correct": 18
+    }
+  }
+}

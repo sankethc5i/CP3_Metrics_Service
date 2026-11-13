@@ -1,0 +1,6 @@
+# Minimal dependency set for offline warehouse/catalog work; no LLM client needed.
+pydantic==2.12.5
+pytest==9.0.2
+Faker==37.12.0
+PyYAML==6.0.3
+sqlglot==28.0.0

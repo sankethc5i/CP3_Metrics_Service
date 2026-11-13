@@ -1,0 +1,16 @@
+{
+  "questions": 22,
+  "model_sources": [
+    "oracle"
+  ],
+  "paid_calls": 0,
+  "failures": [
+    {
+      "id": "invalid_dimension-07",
+      "expected": "refuse",
+      "actual": "clarify",
+      "cause": "Ambiguity/evidence clarification takes precedence over invalid-dimension refusal"
+    }
+  ],
+  "tuning_after_run": false
+}

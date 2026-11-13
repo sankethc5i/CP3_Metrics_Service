@@ -1,0 +1,9 @@
+[run]
+branch = True
+source = app,ui
+
+[report]
+show_missing = True
+
+[html]
+directory = eval/reports/hardening_coverage/html

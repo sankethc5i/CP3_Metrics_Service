@@ -1,0 +1,4 @@
+category,expected_metric_id,expected_outcome,id,mode,mrr,ndcg_at_k,question,recall_at_k,retrieval_error,retrieval_latency_ms
+simple,net_revenue,answer,simple-01,lookup,1.0,1.0,What is our net revenue?,1.0,,0.5974000014248304
+simple,orders,answer,simple-02,lookup,1.0,1.0,How many orders are recorded?,1.0,,0.5377000015869271
+simple,order_lines,answer,simple-03,lookup,1.0,1.0,"Count order lines, including cancelled purchases.",1.0,,0.979599997663172

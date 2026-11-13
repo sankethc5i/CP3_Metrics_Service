@@ -1,0 +1,12 @@
+# Security verification — 2026-11-13
+
+- Focused regression suite: **147 passed**, zero failures/errors/skips, 103.38 seconds. See [JUnit results](tests.xml). All LLM responses were mocked; no live evaluation or locked questions ran.
+- Dependency audit: **57 advisory entries across five packages before; 14 across three afterward**. Remaining entries represent seven distinct advisories: six Moderate and one Low, in pip, pytest and python-dotenv. These remain intentionally unfixed. See [before](pip-audit.json), [after](pip-audit-after.json), [severity metadata](advisory-severities.json).
+- Critical/High dependency fixes: sentence-transformers 6.3.0, Pillow 13.0.0 and compatible Streamlit 1.67.0. A mocked regression reproduced the local-code trust bypass in 5.6.0; it passes on 6.3.0. `pip check`: no broken requirements.
+- Working-tree credential scan: 2,212 text/config/report files, including 20 JSONL files; zero unreadable files. The sole detected credential location is expected local storage `.env:2`; no credential copies or additional credential patterns were detected. No warehouse customer names were detected outside question fields in JSONL. Values are never included in [scan output](secret-scan.json). This scan is not a universal PII detector.
+- Actual application database: write rejected with query-only enabled and again with query-only disabled (URI read-only still enforced); validator rejects writes; database hash unchanged.
+- Application fixes: redact all public response fields and both LLM cache write paths; per-session admission control before model initialization. New injection/disclosure/read-only/abuse regressions are consolidated in `tests/test_security.py`.
+
+Reused evidence: [prior hardening results](../hardening_before_after.md), including validator 32/32 catches and 0/10 false positives, previous full-suite/coverage and separately reported oracle/live evaluation. These historical measurements were not rerun or relabelled as current evaluation results.
+
+Assumptions: local deployment, synthetic warehouse, trusted operators/model directories. Remaining risks: semantic prompt injection, plaintext question/cache retention, session-limit evasion through new sessions, filesystem permissions, and the listed Moderate/Low dependency advisories. Restart Streamlit to activate dependency upgrades. See [security report](../../../docs/security-report.md) for evidence and trust boundaries.

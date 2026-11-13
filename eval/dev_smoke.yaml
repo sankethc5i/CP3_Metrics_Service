@@ -1,0 +1,92 @@
+purpose: temporary development smoke set; never locked evaluation
+cases:
+  - id: "net"
+    question: "What is net revenue last month?"
+    expected_outcome: "answer"
+    expected_metric_id: "net_revenue"
+    request: {"metric_id":"net_revenue","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"last_month"},"grain":"total"}
+  - id: "gross"
+    question: "Show gross revenue by category."
+    expected_outcome: "answer"
+    expected_metric_id: "gross_revenue"
+    request: {"metric_id":"gross_revenue","dimensions":["category"],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "aov"
+    question: "What is average order value?"
+    expected_outcome: "answer"
+    expected_metric_id: "aov"
+    request: {"metric_id":"aov","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "orders"
+    question: "How many submitted orders are there?"
+    expected_outcome: "answer"
+    expected_metric_id: "orders"
+    request: {"metric_id":"orders","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "lines"
+    question: "How many order lines are there?"
+    expected_outcome: "answer"
+    expected_metric_id: "order_lines"
+    request: {"metric_id":"order_lines","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "units"
+    question: "Show units sold by brand."
+    expected_outcome: "answer"
+    expected_metric_id: "units_sold"
+    request: {"metric_id":"units_sold","dimensions":["brand"],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "conversion"
+    question: "What is session conversion rate?"
+    expected_outcome: "answer"
+    expected_metric_id: "conversion_rate"
+    request: {"metric_id":"conversion_rate","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "discount"
+    question: "What is the discount rate?"
+    expected_outcome: "answer"
+    expected_metric_id: "discount_rate"
+    request: {"metric_id":"discount_rate","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "cancel"
+    question: "What is cancellation rate?"
+    expected_outcome: "answer"
+    expected_metric_id: "cancellation_rate"
+    request: {"metric_id":"cancellation_rate","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "repeat"
+    question: "What is repeat purchase rate?"
+    expected_outcome: "answer"
+    expected_metric_id: "repeat_purchase_rate"
+    request: {"metric_id":"repeat_purchase_rate","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "new"
+    question: "How many new customers signed up?"
+    expected_outcome: "answer"
+    expected_metric_id: "new_customers"
+    request: {"metric_id":"new_customers","dimensions":[],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "ambiguous_revenue"
+    question: "What is revenue?"
+    expected_outcome: "clarify"
+    expected_metric_id: null
+    request: null
+  - id: "ambiguous_region"
+    question: "Show gross revenue by region."
+    expected_outcome: "clarify"
+    expected_metric_id: "gross_revenue"
+    request: {"metric_id":"gross_revenue","dimensions":["order_region"],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "unknown_brand"
+    question: "Show net revenue for brand UnknownBrand."
+    expected_outcome: "clarify"
+    expected_metric_id: "net_revenue"
+    request: {"metric_id":"net_revenue","dimensions":[],"filters":[{"dimension":"brand","operator":"eq","values":["UnknownBrand"]}],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "undefined"
+    question: "What is customer lifetime value?"
+    expected_outcome: "refuse"
+    expected_metric_id: null
+    request: null
+  - id: "bad_dimension"
+    question: "Show orders by category."
+    expected_outcome: "refuse"
+    expected_metric_id: "orders"
+    request: {"metric_id":"orders","dimensions":["category"],"filters":[],"time_range":{"start":null,"end":null,"relative":"all_time"},"grain":"total"}
+  - id: "empty_net"
+    question: "What was net revenue in January 2020?"
+    expected_outcome: "empty_result"
+    expected_metric_id: "net_revenue"
+    request: {"metric_id":"net_revenue","dimensions":[],"filters":[],"time_range":{"start":"2020-01-01","end":"2020-02-01","relative":null},"grain":"total"}
+  - id: "empty_orders"
+    question: "How many orders were placed in January 2020?"
+    expected_outcome: "empty_result"
+    expected_metric_id: "orders"
+    request: {"metric_id":"orders","dimensions":[],"filters":[],"time_range":{"start":"2020-01-01","end":"2020-02-01","relative":null},"grain":"total"}

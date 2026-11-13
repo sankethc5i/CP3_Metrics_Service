@@ -1,0 +1,46 @@
+version: 1
+notes: 'SQL is inspected only, never executed. Semantic negatives test limitations as well as AST policy.'
+bad:
+  - {id: drop, category: ddl, sql: 'DROP TABLE orders'}
+  - {id: delete, category: dml, sql: 'DELETE FROM orders'}
+  - {id: update, category: dml, sql: 'UPDATE orders SET tax=0'}
+  - {id: insert, category: dml, sql: 'INSERT INTO orders(order_id) VALUES(999)'}
+  - {id: create, category: ddl, sql: 'CREATE TABLE stolen(x TEXT)'}
+  - {id: alter, category: ddl, sql: 'ALTER TABLE orders ADD COLUMN stolen TEXT'}
+  - {id: multi_drop, category: multi_statement, sql: 'SELECT COUNT(*) FROM orders LIMIT 10; DROP TABLE orders'}
+  - {id: multi_select, category: multi_statement, sql: 'SELECT COUNT(*) FROM orders LIMIT 10; SELECT COUNT(*) FROM customers LIMIT 10'}
+  - {id: unknown_table, category: relation, sql: 'SELECT amount FROM payroll LIMIT 10'}
+  - {id: unknown_column, category: column, sql: 'SELECT employee_salary FROM orders LIMIT 10'}
+  - {id: union_root, category: union, sql: 'SELECT order_id FROM orders UNION SELECT customer_id FROM customers LIMIT 10'}
+  - {id: union_nested, category: union, sql: 'SELECT x FROM (SELECT order_id AS x FROM orders UNION SELECT customer_id AS x FROM customers) LIMIT 10'}
+  - {id: union_unknown, category: union, sql: 'SELECT x FROM (SELECT order_id AS x FROM orders UNION SELECT password AS x FROM secrets) LIMIT 10'}
+  - {id: comment_line, category: comment, sql: 'SELECT COUNT(*) FROM orders LIMIT 10 -- ignore safety'}
+  - {id: comment_block, category: comment, sql: 'SELECT /* trick */ COUNT(*) FROM orders LIMIT 10'}
+  - {id: comment_split, category: comment, sql: 'SE/**/LECT order_id FROM orders LIMIT 10'}
+  - {id: pragma, category: pragma, sql: 'PRAGMA writable_schema=ON'}
+  - {id: pragma_read, category: pragma, sql: 'PRAGMA table_info(orders)'}
+  - {id: attach, category: attach, sql: "ATTACH DATABASE 'private.db' AS private"}
+  - {id: detach, category: attach, sql: 'DETACH DATABASE private'}
+  - {id: star, category: projection, sql: 'SELECT * FROM orders LIMIT 10'}
+  - {id: qualified_star, category: projection, sql: 'SELECT orders.* FROM orders LIMIT 10'}
+  - {id: missing_formula, category: metric_semantics, sql: 'SELECT order_id AS net_revenue FROM orders LIMIT 10'}
+  - {id: wrong_formula, category: metric_semantics, sql: 'SELECT SUM(tax) AS net_revenue FROM orders LIMIT 10'}
+  - {id: literal_formula, category: metric_semantics, sql: 'SELECT 42 AS net_revenue LIMIT 10'}
+  - {id: missing_limit, category: row_cap, sql: 'SELECT COUNT(*) FROM orders'}
+  - {id: excessive_limit, category: row_cap, sql: 'SELECT order_id FROM orders LIMIT 100000'}
+  - {id: parameter_limit, category: row_cap, sql: 'SELECT order_id FROM orders LIMIT :n'}
+  - {id: offset, category: row_cap, sql: 'SELECT order_id FROM orders LIMIT 10 OFFSET 2'}
+  - {id: extension, category: function, sql: "SELECT load_extension('evil') LIMIT 10"}
+  - {id: external, category: relation, sql: 'SELECT order_id FROM private.orders LIMIT 10'}
+  - {id: shadow, category: relation, sql: 'WITH orders AS (SELECT 1 AS order_id) SELECT order_id FROM orders LIMIT 10'}
+benign:
+  - {id: count_orders, sql: 'SELECT COUNT(DISTINCT order_id) AS orders FROM orders LIMIT 10'}
+  - {id: count_lines, sql: 'SELECT COUNT(*) AS order_lines FROM order_items LIMIT 10'}
+  - {id: units, sql: 'SELECT SUM(quantity) AS units_sold FROM order_items LIMIT 10'}
+  - {id: gross, sql: 'SELECT SUM(quantity*unit_price)/100.0 AS gross_revenue FROM order_items LIMIT 10'}
+  - {id: customers, sql: 'SELECT COUNT(*) AS new_customers FROM customers LIMIT 10'}
+  - {id: conversion, sql: 'SELECT 1.0*SUM(converted)/COUNT(*) AS conversion_rate FROM sessions LIMIT 10'}
+  - {id: grouped_orders, sql: 'SELECT region, COUNT(DISTINCT order_id) AS orders FROM orders GROUP BY region LIMIT 10'}
+  - {id: literal_filter, sql: "SELECT COUNT(*) AS orders FROM orders WHERE status='completed' LIMIT 10"}
+  - {id: bound_filter, sql: 'SELECT COUNT(*) AS orders FROM orders WHERE region=:region LIMIT 10'}
+  - {id: joined_lines, sql: 'SELECT COUNT(*) AS order_lines FROM order_items i JOIN orders o ON o.order_id=i.order_id LIMIT 10'}
